@@ -1,12 +1,14 @@
-from fastapi import FastAPI
-from contextlib import asynccontextmanager
 import os
-from omni_osint_query.routers import (
-    query_router,
-    neighbors_router,
-    health_router,
-)
+from contextlib import asynccontextmanager
+
+from fastapi import FastAPI
 from omni_python_library import init_omni_library
+
+from omni_osint_query.routers import (
+    health_router,
+    neighbors_router,
+    query_router,
+)
 
 
 @asynccontextmanager

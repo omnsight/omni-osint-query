@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException, Depends
+import logging
 from typing import Dict, List, Optional
-from pydantic import BaseModel
+
+from fastapi import APIRouter, Depends, HTTPException
 from omni_python_library.dal.osint_data_access_layer import OsintDataAccessLayer
 from omni_python_library.dal.query_tools.event_search import search_events
 from omni_python_library.middleware.user_token import get_user_context
@@ -8,7 +9,7 @@ from omni_python_library.models.osint import (
     Event,
     Relation,
 )
-import logging
+from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
 

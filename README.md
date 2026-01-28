@@ -21,7 +21,7 @@ This project is managed with [uv](https://github.com/astral-sh/uv).
 
 Install dependencies:
 ```bash
-uv sync
+uv sync --extra dev
 ```
 
 Upgrade dependencies:
@@ -47,4 +47,5 @@ uv run python tools/export_openapi.py
 Format the code using black:
 ```bash
 uv run black .
+uv run isort .
 ```

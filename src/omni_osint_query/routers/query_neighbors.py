@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException, Depends
+import logging
 from typing import Dict, List
-from pydantic import BaseModel
+
+from fastapi import APIRouter, Depends, HTTPException
 from omni_python_library.dal.osint_data_access_layer import OsintDataAccessLayer
 from omni_python_library.dal.query_tools.entity_neighborhood import (
     search_entity_neighborhood,
@@ -8,13 +9,13 @@ from omni_python_library.dal.query_tools.entity_neighborhood import (
 from omni_python_library.middleware.user_token import get_user_context
 from omni_python_library.models.osint import (
     Event,
-    Source,
-    Person,
     Organization,
-    Website,
+    Person,
     Relation,
+    Source,
+    Website,
 )
-import logging
+from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
 
@@ -36,9 +37,7 @@ class NeighborsResponse(BaseModel):
 
 
 @router.post("/neighbors", response_model=NeighborsResponse)
-def get_neighbors(
-    request: NeighborsRequest, user_ctx: Dict = Depends(get_user_context)
-):
+def get_neighbors(request: NeighborsRequest, user_ctx: Dict = Depends(get_user_context)):
     try:
         results = search_entity_neighborhood(
             entity_id=request.entity_id,
