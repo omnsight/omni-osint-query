@@ -1,0 +1,1408 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Omni OSINT Query",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/query/query_events": {
+      "post": {
+        "tags": [
+          "query"
+        ],
+        "summary": "Execute Query",
+        "operationId": "execute_query_query_query_events_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QueryResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/query/neighbors": {
+      "post": {
+        "tags": [
+          "query"
+        ],
+        "summary": "Get Neighbors",
+        "operationId": "get_neighbors_query_neighbors_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NeighborsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NeighborsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "Health Check",
+        "operationId": "health_check_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthCheck"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Event": {
+        "properties": {
+          "type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Type",
+            "description": "Type of event"
+          },
+          "location": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LocationData"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Location of the event"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title",
+            "description": "Title"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description",
+            "description": "Description"
+          },
+          "happened_at": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Happened At",
+            "description": "Timestamp when the event happened"
+          },
+          "updated_at": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updated At",
+            "description": "Update timestamp"
+          },
+          "tags": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tags",
+            "description": "Tags"
+          },
+          "attributes": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attributes",
+            "description": "Additional attributes"
+          },
+          "owner": {
+            "type": "string",
+            "title": "Owner",
+            "description": "Owner of the document"
+          },
+          "read": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Read",
+            "description": "Users/Roles with read access"
+          },
+          "write": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Write",
+            "description": "Users/Roles with write access"
+          },
+          "_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id",
+            "description": "ArangoDB document ID"
+          },
+          "_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Key",
+            "description": "ArangoDB document key"
+          },
+          "_rev": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rev",
+            "description": "ArangoDB document revision"
+          }
+        },
+        "type": "object",
+        "title": "Event",
+        "description": "Represents an event."
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthCheck": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "HealthCheck"
+      },
+      "LocationData": {
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "title": "Latitude",
+            "description": "Latitude"
+          },
+          "longitude": {
+            "type": "number",
+            "title": "Longitude",
+            "description": "Longitude"
+          },
+          "country_code": {
+            "type": "string",
+            "title": "Country Code",
+            "description": "ISO country code"
+          },
+          "administrative_area": {
+            "type": "string",
+            "title": "Administrative Area",
+            "description": "Administrative area (e.g., state, province)"
+          },
+          "sub_administrative_area": {
+            "type": "string",
+            "title": "Sub Administrative Area",
+            "description": "Sub-administrative area"
+          },
+          "locality": {
+            "type": "string",
+            "title": "Locality",
+            "description": "Locality (e.g., city, town)"
+          },
+          "sub_locality": {
+            "type": "string",
+            "title": "Sub Locality",
+            "description": "Sub-locality"
+          },
+          "address": {
+            "type": "string",
+            "title": "Address",
+            "description": "Full address"
+          },
+          "postal_code": {
+            "type": "integer",
+            "title": "Postal Code",
+            "description": "Postal code"
+          }
+        },
+        "type": "object",
+        "required": [
+          "latitude",
+          "longitude",
+          "country_code",
+          "administrative_area",
+          "sub_administrative_area",
+          "locality",
+          "sub_locality",
+          "address",
+          "postal_code"
+        ],
+        "title": "LocationData",
+        "description": "Represents geographical location data."
+      },
+      "NeighborsRequest": {
+        "properties": {
+          "entity_id": {
+            "type": "string",
+            "title": "Entity Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "entity_id"
+        ],
+        "title": "NeighborsRequest"
+      },
+      "NeighborsResponse": {
+        "properties": {
+          "events": {
+            "items": {
+              "$ref": "#/components/schemas/Event"
+            },
+            "type": "array",
+            "title": "Events",
+            "default": []
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/Source"
+            },
+            "type": "array",
+            "title": "Sources",
+            "default": []
+          },
+          "persons": {
+            "items": {
+              "$ref": "#/components/schemas/Person"
+            },
+            "type": "array",
+            "title": "Persons",
+            "default": []
+          },
+          "organizations": {
+            "items": {
+              "$ref": "#/components/schemas/Organization"
+            },
+            "type": "array",
+            "title": "Organizations",
+            "default": []
+          },
+          "websites": {
+            "items": {
+              "$ref": "#/components/schemas/Website"
+            },
+            "type": "array",
+            "title": "Websites",
+            "default": []
+          },
+          "relations": {
+            "items": {
+              "$ref": "#/components/schemas/Relation"
+            },
+            "type": "array",
+            "title": "Relations",
+            "default": []
+          }
+        },
+        "type": "object",
+        "title": "NeighborsResponse"
+      },
+      "Organization": {
+        "properties": {
+          "type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Type",
+            "description": "Type of organization"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name",
+            "description": "Name"
+          },
+          "founded_at": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Founded At",
+            "description": "Founded timestamp"
+          },
+          "discovered_at": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Discovered At",
+            "description": "Discovered timestamp"
+          },
+          "last_visited": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Visited",
+            "description": "Last visited timestamp"
+          },
+          "tags": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tags",
+            "description": "Tags"
+          },
+          "attributes": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attributes",
+            "description": "Additional attributes"
+          },
+          "owner": {
+            "type": "string",
+            "title": "Owner",
+            "description": "Owner of the document"
+          },
+          "read": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Read",
+            "description": "Users/Roles with read access"
+          },
+          "write": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Write",
+            "description": "Users/Roles with write access"
+          },
+          "_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id",
+            "description": "ArangoDB document ID"
+          },
+          "_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Key",
+            "description": "ArangoDB document key"
+          },
+          "_rev": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rev",
+            "description": "ArangoDB document revision"
+          }
+        },
+        "type": "object",
+        "title": "Organization",
+        "description": "Represents an organization."
+      },
+      "Person": {
+        "properties": {
+          "role": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Role",
+            "description": "Role"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name",
+            "description": "Name"
+          },
+          "nationality": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nationality",
+            "description": "Nationality"
+          },
+          "birth_date": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Birth Date",
+            "description": "Birth date timestamp"
+          },
+          "updated_at": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updated At",
+            "description": "Update timestamp"
+          },
+          "tags": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tags",
+            "description": "Tags"
+          },
+          "aliases": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aliases",
+            "description": "Aliases"
+          },
+          "attributes": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attributes",
+            "description": "Additional attributes"
+          },
+          "owner": {
+            "type": "string",
+            "title": "Owner",
+            "description": "Owner of the document"
+          },
+          "read": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Read",
+            "description": "Users/Roles with read access"
+          },
+          "write": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Write",
+            "description": "Users/Roles with write access"
+          },
+          "_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id",
+            "description": "ArangoDB document ID"
+          },
+          "_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Key",
+            "description": "ArangoDB document key"
+          },
+          "_rev": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rev",
+            "description": "ArangoDB document revision"
+          }
+        },
+        "type": "object",
+        "title": "Person",
+        "description": "Represents a person."
+      },
+      "QueryRequest": {
+        "properties": {
+          "query": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Query"
+          },
+          "date_start": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date Start"
+          },
+          "date_end": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date End"
+          },
+          "country_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Country Code"
+          }
+        },
+        "type": "object",
+        "title": "QueryRequest"
+      },
+      "QueryResponse": {
+        "properties": {
+          "events": {
+            "items": {
+              "$ref": "#/components/schemas/Event"
+            },
+            "type": "array",
+            "title": "Events",
+            "default": []
+          },
+          "relations": {
+            "items": {
+              "$ref": "#/components/schemas/Relation"
+            },
+            "type": "array",
+            "title": "Relations",
+            "default": []
+          }
+        },
+        "type": "object",
+        "title": "QueryResponse"
+      },
+      "Relation": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name",
+            "description": "Name of the relation"
+          },
+          "confidence": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confidence",
+            "description": "Confidence score"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label",
+            "description": "Label"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At",
+            "description": "Creation timestamp"
+          },
+          "updated_at": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updated At",
+            "description": "Update timestamp"
+          },
+          "attributes": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attributes",
+            "description": "Additional attributes"
+          },
+          "_from": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "From",
+            "description": "Source document ID"
+          },
+          "_to": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "To",
+            "description": "Target document ID"
+          },
+          "owner": {
+            "type": "string",
+            "title": "Owner",
+            "description": "Owner of the document"
+          },
+          "read": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Read",
+            "description": "Users/Roles with read access"
+          },
+          "write": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Write",
+            "description": "Users/Roles with write access"
+          },
+          "_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id",
+            "description": "ArangoDB document ID"
+          },
+          "_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Key",
+            "description": "ArangoDB document key"
+          },
+          "_rev": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rev",
+            "description": "ArangoDB document revision"
+          }
+        },
+        "type": "object",
+        "title": "Relation",
+        "description": "Represents a relationship between two entities."
+      },
+      "Source": {
+        "properties": {
+          "type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Type",
+            "description": "Type of source"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url",
+            "description": "URL"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name",
+            "description": "Name"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title",
+            "description": "Title"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description",
+            "description": "Description"
+          },
+          "reliability": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reliability",
+            "description": "Reliability score"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At",
+            "description": "Creation timestamp"
+          },
+          "updated_at": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updated At",
+            "description": "Update timestamp"
+          },
+          "tags": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tags",
+            "description": "Tags"
+          },
+          "attributes": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attributes",
+            "description": "Additional attributes"
+          },
+          "owner": {
+            "type": "string",
+            "title": "Owner",
+            "description": "Owner of the document"
+          },
+          "read": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Read",
+            "description": "Users/Roles with read access"
+          },
+          "write": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Write",
+            "description": "Users/Roles with write access"
+          },
+          "_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id",
+            "description": "ArangoDB document ID"
+          },
+          "_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Key",
+            "description": "ArangoDB document key"
+          },
+          "_rev": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rev",
+            "description": "ArangoDB document revision"
+          }
+        },
+        "type": "object",
+        "title": "Source",
+        "description": "Represents a source of information."
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "Website": {
+        "properties": {
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url",
+            "description": "URL"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title",
+            "description": "Title"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description",
+            "description": "Description"
+          },
+          "founded_at": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Founded At",
+            "description": "Founded timestamp"
+          },
+          "discovered_at": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Discovered At",
+            "description": "Discovered timestamp"
+          },
+          "last_visited": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Visited",
+            "description": "Last visited timestamp"
+          },
+          "tags": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tags",
+            "description": "Tags"
+          },
+          "attributes": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attributes",
+            "description": "Additional attributes"
+          },
+          "owner": {
+            "type": "string",
+            "title": "Owner",
+            "description": "Owner of the document"
+          },
+          "read": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Read",
+            "description": "Users/Roles with read access"
+          },
+          "write": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Write",
+            "description": "Users/Roles with write access"
+          },
+          "_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id",
+            "description": "ArangoDB document ID"
+          },
+          "_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Key",
+            "description": "ArangoDB document key"
+          },
+          "_rev": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rev",
+            "description": "ArangoDB document revision"
+          }
+        },
+        "type": "object",
+        "title": "Website",
+        "description": "Represents a website."
+      }
+    }
+  }
+}

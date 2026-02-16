@@ -5,7 +5,7 @@ from pathlib import Path
 # Ensure src is in python path
 sys.path.append(str(Path(__file__).parent.parent / "src"))
 
-from omni_osint_crud.main import app
+from omni_osint_query.main import app
 
 
 def export_openapi():
