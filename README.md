@@ -30,6 +30,14 @@ uv lock --upgrade
 uv sync --extra dev
 ```
 
+Run unit tests
+```bash
+# loading .env is necessary for local testing
+docker compose up -d --wait
+export $(cat .env | xargs) && uv run pytest
+docker compose down
+```
+
 Run the application:
 ```bash
 uv run uvicorn omni_osint_query.main:app --reload
