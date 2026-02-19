@@ -1,4 +1,5 @@
-# omni-osint-query
+# Omni Osint Query API Backend
+[![codecov](https://codecov.io/github/omnsight/omni-osint-query/graph/badge.svg?token=HYQJI9LHMK)](https://codecov.io/github/omnsight/omni-osint-query)
 
 ## Project Structure
 

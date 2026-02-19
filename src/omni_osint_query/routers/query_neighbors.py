@@ -52,6 +52,6 @@ def get_neighbors(request: NeighborsRequest, user_ctx: Dict = Depends(get_user_c
             websites=[w for w in results if isinstance(w, Website)],
             relations=[r for r in results if isinstance(r, Relation)],
         )
-    except Exception as e:
+    except Exception:
         logger.exception("Error executing neighbors query")
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")

@@ -43,6 +43,6 @@ def execute_query(request: QueryRequest, user_ctx: Dict = Depends(get_user_conte
             events=[e for e in results if isinstance(e, Event)],
             relations=[r for r in results if isinstance(r, Relation)],
         )
-    except Exception as e:
+    except Exception:
         logger.exception("Error executing query")
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=500, detail="Internal server error")
