@@ -1,6 +1,21 @@
 # Omni Osint Query API Backend
 [![codecov](https://codecov.io/github/omnsight/omni-osint-query/graph/badge.svg?token=HYQJI9LHMK)](https://codecov.io/github/omnsight/omni-osint-query)
 
+## Overview
+
+The Omni OSINT Query API is a backend service designed to provide a powerful and flexible interface for querying open-source intelligence (OSINT) data. It is built with a modern Python stack, leveraging FastAPI for high-performance API development and Pydantic for robust data validation.
+
+This service integrates with a graph database to represent complex relationships between different OSINT entities, such as events, persons, organizations, and websites. It exposes a set of API endpoints that allow clients to perform sophisticated queries, such as searching for events within a specific date range, finding neighboring entities connected to a given entity, and more.
+
+### Key Features
+
+- **FastAPI-Based**: Built on FastAPI, the service is asynchronous, fast, and includes automatic OpenAPI documentation generation.
+- **Graph-Based Data Model**: Leverages a graph database to model and query complex relationships between OSINT data points.
+- **Entity-Relationship Queries**: Provides endpoints for searching entity neighborhoods, allowing clients to explore connections between data.
+- **Event and Entity Search**: Supports querying for events and other entities with filters for date ranges, text search, and other attributes.
+- **Authentication and Authorization**: Secures endpoints using JWT-based authentication and role-based access control.
+- **Containerized**: Fully containerized with Docker, making it easy to set up and run in a local development environment or deploy to production.
+
 ## Project Structure
 
 High-level overview of the project folder structure:
@@ -48,7 +63,7 @@ uv run uvicorn omni_osint_query.main:app --reload
 
 Export the OpenAPI definition to `doc/openapi.json`:
 ```bash
-uv run python tools/export_openapi.py
+uv run python scripts/export_openapi.py
 ```
 
 ### Code Formatting
@@ -57,4 +72,12 @@ Format the code using black:
 ```bash
 uv run black .
 uv run isort .
+```
+
+### Generate Client
+
+```bash
+cd client
+npm run generate
+cd ..
 ```
