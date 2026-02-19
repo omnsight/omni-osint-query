@@ -80,3 +80,12 @@ class TestEvent:
         assert {e["_id"] for e in data["events"]} == {event1.id, event2.id}
         assert len(data["relations"]) == 1
         assert data["relations"][0]["_id"] == relation.id
+
+    def test_execute_query_exception(self):
+        from unittest.mock import patch
+
+        with patch("omni_osint_query.routers.query_events.search_events") as mock_search:
+            mock_search.side_effect = Exception("Test exception")
+            response = self.client.post("/query/query_events", json={})
+            assert response.status_code == 500
+            assert response.json() == {"detail": "Internal server error"}

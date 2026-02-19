@@ -91,3 +91,12 @@ class TestNeighbors:
         assert len(data["websites"]) == 1
         assert data["websites"][0]["_id"] == website.id
         assert len(data["relations"]) == 4
+
+    def test_get_neighbors_exception(self):
+        from unittest.mock import patch
+
+        with patch("omni_osint_query.routers.query_neighbors.search_entity_neighborhood") as mock_search:
+            mock_search.side_effect = Exception("Test exception")
+            response = self.client.post("/query/neighbors", json={"entity_id": "any_id"})
+            assert response.status_code == 500
+            assert response.json() == {"detail": "Internal server error"}
