@@ -182,7 +182,7 @@
               }
             ],
             "title": "Title",
-            "description": "Title"
+            "description": "Title of the event. Keep it short and clear."
           },
           "description": {
             "anyOf": [
@@ -194,7 +194,7 @@
               }
             ],
             "title": "Description",
-            "description": "Description"
+            "description": "Brief description of the event. Keep it short and clear."
           },
           "happened_at": {
             "anyOf": [
@@ -490,7 +490,7 @@
               }
             ],
             "title": "Name",
-            "description": "Name"
+            "description": "Name of the organization"
           },
           "founded_at": {
             "anyOf": [
@@ -869,7 +869,7 @@
               }
             ],
             "title": "Name",
-            "description": "Name of the relation"
+            "description": "Name of the relation used in database key (must be ascii letters)"
           },
           "confidence": {
             "anyOf": [
@@ -893,7 +893,7 @@
               }
             ],
             "title": "Label",
-            "description": "Label"
+            "description": "Label name of the relation (can be any language) to display"
           },
           "created_at": {
             "anyOf": [
@@ -1054,7 +1054,7 @@
               }
             ],
             "title": "Name",
-            "description": "Name"
+            "description": "Name of the source"
           },
           "title": {
             "anyOf": [
@@ -1066,7 +1066,7 @@
               }
             ],
             "title": "Title",
-            "description": "Title"
+            "description": "Title of the source. Keep it short and clear."
           },
           "description": {
             "anyOf": [
@@ -1078,7 +1078,7 @@
               }
             ],
             "title": "Description",
-            "description": "Description"
+            "description": "Brief description of the source. Keep it short and clear."
           },
           "reliability": {
             "anyOf": [
@@ -1229,6 +1229,13 @@
           "type": {
             "type": "string",
             "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
           }
         },
         "type": "object",
@@ -1263,7 +1270,7 @@
               }
             ],
             "title": "Title",
-            "description": "Title"
+            "description": "Title of the website. Keep it short and clear."
           },
           "description": {
             "anyOf": [
@@ -1275,7 +1282,7 @@
               }
             ],
             "title": "Description",
-            "description": "Description"
+            "description": "Brief description of the website. Keep it short and clear."
           },
           "founded_at": {
             "anyOf": [
