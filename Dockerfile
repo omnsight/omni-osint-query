@@ -1,28 +1,35 @@
-FROM python:3.11-slim
+FROM python:3.11-slim-bookworm
+
+# Install uv
+RUN pip install uv
 
 WORKDIR /app
 
-# Install git for git dependencies
-RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
+# Enable bytecode compilation
+ENV UV_COMPILE_BYTECODE=1
 
-# Install uv
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
+# Copy from the cache instead of linking since it's a mounted volume
+ENV UV_LINK_MODE=copy
 
-# Copy dependency files
+# Copy the project's dependency files
 COPY pyproject.toml uv.lock ./
 
-# Install dependencies
-# --frozen ensures we use the exact versions from uv.lock
-RUN uv sync --frozen --no-install-project
+# Install the project's dependencies using the lockfile and settings
+RUN apt-get update && apt-get install -y git
+RUN uv sync --frozen --no-install-project --no-dev
 
-# Copy source code
+# Copy the project source code
 COPY src ./src
+COPY README.md ./
 
-# Install the project itself
-RUN uv sync --frozen
+# Install the project
+RUN uv sync --frozen --no-dev
 
-# Place the virtual environment in the path
+# Place executables in the environment at the front of the path
 ENV PATH="/app/.venv/bin:$PATH"
+
+# Reset the entrypoint, don't invoke `uv`
+ENTRYPOINT []
 
 # Run the application
 CMD ["uvicorn", "omni_osint_query.main:app", "--host", "0.0.0.0", "--port", "8000"]
