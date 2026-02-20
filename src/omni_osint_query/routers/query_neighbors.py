@@ -34,8 +34,8 @@ class NeighborsResponse(BaseModel):
     relations: List[Relation] = []
 
 
-@router.post("/neighbors", response_model=NeighborsResponse)
-def get_neighbors(request: NeighborsRequest, user_ctx: Dict = Depends(get_user_context)):
+@router.post("/neighbors", response_model=NeighborsResponse, operation_id="query_neighbors")
+def query_neighbors(request: NeighborsRequest, user_ctx: Dict = Depends(get_user_context)):
     try:
         results = search_entity_neighborhood(
             entity_id=request.entity_id,

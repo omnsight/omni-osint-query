@@ -5,13 +5,13 @@
     "version": "0.1.0"
   },
   "paths": {
-    "/query/query_events": {
+    "/query/events": {
       "post": {
         "tags": [
           "query"
         ],
-        "summary": "Execute Query",
-        "operationId": "execute_query_query_query_events_post",
+        "summary": "Query Events",
+        "operationId": "query_events",
         "parameters": [
           {
             "name": "authorization",
@@ -69,8 +69,8 @@
         "tags": [
           "query"
         ],
-        "summary": "Get Neighbors",
-        "operationId": "get_neighbors_query_neighbors_post",
+        "summary": "Query Neighbors",
+        "operationId": "query_neighbors",
         "parameters": [
           {
             "name": "authorization",
@@ -129,7 +129,7 @@
           "health"
         ],
         "summary": "Health Check",
-        "operationId": "health_check_health_get",
+        "operationId": "health_check",
         "responses": {
           "200": {
             "description": "Successful Response",

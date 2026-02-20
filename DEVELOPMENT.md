@@ -70,7 +70,9 @@ npm run generate
 Run unit tests: 
 ```bash
 docker compose up -d --wait
-cd client && npm run test && cd ..
+cd client
+npm run test
+cd ..
 docker compose down
 ```
 

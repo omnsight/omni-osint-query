@@ -27,8 +27,8 @@ class QueryResponse(BaseModel):
     relations: List[Relation] = []
 
 
-@router.post("/query_events", response_model=QueryResponse)
-def execute_query(request: QueryRequest, user_ctx: Dict = Depends(get_user_context)):
+@router.post("/events", response_model=QueryResponse, operation_id="query_events")
+def query_events(request: QueryRequest, user_ctx: Dict = Depends(get_user_context)):
     try:
         results = search_events(
             owner=user_ctx["user_id"],

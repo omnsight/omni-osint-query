@@ -11,19 +11,19 @@ import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class QueryService {
     /**
-     * Execute Query
+     * Query Events
      * @param requestBody
      * @param authorization
      * @returns QueryResponse Successful Response
      * @throws ApiError
      */
-    public static executeQueryQueryQueryEventsPost(
+    public static queryEvents(
         requestBody: QueryRequest,
         authorization?: (string | null),
     ): CancelablePromise<QueryResponse> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/query/query_events',
+            url: '/query/events',
             headers: {
                 'authorization': authorization,
             },
@@ -35,13 +35,13 @@ export class QueryService {
         });
     }
     /**
-     * Get Neighbors
+     * Query Neighbors
      * @param requestBody
      * @param authorization
      * @returns NeighborsResponse Successful Response
      * @throws ApiError
      */
-    public static getNeighborsQueryNeighborsPost(
+    public static queryNeighbors(
         requestBody: NeighborsRequest,
         authorization?: (string | null),
     ): CancelablePromise<NeighborsResponse> {
