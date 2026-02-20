@@ -29,55 +29,39 @@ High-level overview of the project folder structure:
 - `pyproject.toml` / `uv.lock`: Python dependency management and project configuration.
 - `docker-compose.yml` / `Dockerfile`: Containerization configuration.
 
+## Usage
+
+### API Call Using Typescript Client
+
+To use this client in your project, add the following to your `package.json`:
+
+```json
+{
+  "dependencies": {
+    "omni_osint_query": "github.com/omnsight/omni-osint-query#main"
+  }
+}
+```
+
+Here is a sample code snippet demonstrating how to use the client to invoke API calls.
+
+```typescript
+import { HealthService, OpenAPI } from 'omni_osint_query';
+
+async function main() {
+  // Configure the base URL and a static token
+  OpenAPI.BASE = 'http://localhost:8000';
+  OpenAPI.TOKEN = 'your-static-jwt-token-here';
+
+  try {
+    const health = await HealthService.healthCheckHealthGet();
+    console.log('Health check result:', health);
+  } catch (error) {
+    console.error('Error fetching health check:', error);
+  }
+}
+```
+
 ## Local Development
 
-### Manage with uv
-
-This project is managed with [uv](https://github.com/astral-sh/uv).
-
-Install dependencies:
-```bash
-uv sync --extra dev
-```
-
-Upgrade dependencies:
-```bash
-uv lock --upgrade
-uv sync --extra dev
-```
-
-Run unit tests
-```bash
-# loading .env is necessary for local testing
-docker compose up -d --wait
-export $(cat .env | xargs) && uv run pytest
-docker compose down
-```
-
-Run the application:
-```bash
-uv run uvicorn omni_osint_query.main:app --reload
-```
-
-### Export OpenAPI Definition
-
-Export the OpenAPI definition to `doc/openapi.json`:
-```bash
-uv run python scripts/export_openapi.py
-```
-
-### Code Formatting
-
-Format the code using black:
-```bash
-uv run black .
-uv run isort .
-```
-
-### Generate Client
-
-```bash
-cd client
-npm run generate
-cd ..
-```
+Refer to [DEVELOPMENT.md](DEVELOPMENT.md) for local development setup.

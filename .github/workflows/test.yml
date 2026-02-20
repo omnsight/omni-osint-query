@@ -1,4 +1,3 @@
-
 name: Run Tests and Report Coverage
 
 on:
@@ -28,7 +27,7 @@ jobs:
           pip install uv
           uv sync --extra dev
 
-      - name: 🧪 Run tests and generate coverage report
+      - name: 🧪 Run python tests and generate coverage report
         env:
           stage: "local"
           ARANGODB_HOST: "http://localhost:8529"
@@ -40,6 +39,19 @@ jobs:
           REDIS_PORT: "6379"
           REDIS_PASSWORD: ""
         run: uv run pytest
+
+      - name: ⚡ Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 📦 Install client dependencies
+        run: npm install
+        working-directory: ./client
+
+      - name: 🧪 Run client tests
+        run: npm test
+        working-directory: ./client
 
       - name: 🛑 Stop services
         if: always()
