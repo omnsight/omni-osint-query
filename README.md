@@ -1,67 +1,131 @@
-# Omni Osint Query API Backend
+# Omni OSINT Query
 [![codecov](https://codecov.io/github/omnsight/omni-osint-query/graph/badge.svg?token=HYQJI9LHMK)](https://codecov.io/github/omnsight/omni-osint-query)
 
-## Overview
+A FastAPI-based service providing OSINT (Open Source Intelligence) query capabilities, including features for finding neighbors and events related to a query.
 
-The Omni OSINT Query API is a backend service designed to provide a powerful and flexible interface for querying open-source intelligence (OSINT) data. It is built with a modern Python stack, leveraging FastAPI for high-performance API development and Pydantic for robust data validation.
+### 🚀 Features
 
-This service integrates with a graph database to represent complex relationships between different OSINT entities, such as events, persons, organizations, and websites. It exposes a set of API endpoints that allow clients to perform sophisticated queries, such as searching for events within a specific date range, finding neighboring entities connected to a given entity, and more.
+- Health checks to monitor service status.
+- Query endpoint for searching OSINT data.
+- Neighbors endpoint to find related entities.
 
-### Key Features
+### 🛠 Tech Stack
 
-- **FastAPI-Based**: Built on FastAPI, the service is asynchronous, fast, and includes automatic OpenAPI documentation generation.
-- **Graph-Based Data Model**: Leverages a graph database to model and query complex relationships between OSINT data points.
-- **Entity-Relationship Queries**: Provides endpoints for searching entity neighborhoods, allowing clients to explore connections between data.
-- **Event and Entity Search**: Supports querying for events and other entities with filters for date ranges, text search, and other attributes.
-- **Authentication and Authorization**: Secures endpoints using JWT-based authentication and role-based access control.
-- **Containerized**: Fully containerized with Docker, making it easy to set up and run in a local development environment or deploy to production.
+- Python
+- FastAPI
+- ArangoDB
+- Redis
+- Docker
+- uv
 
-## Project Structure
+## 📦 Getting Started
 
-High-level overview of the project folder structure:
+### Prerequisites
 
-- `client/`: TypeScript client library generated from the OpenAPI definition. Contains source code and build scripts.
-- `doc/`: Documentation artifacts, including `openapi.json` used for client generation.
-- `src/omni_osint_query/`: Python source code for the backend application.
-    - `routers/`: API route definitions.
-    - `main.py`: Application entry point and configuration.
-- `tools/`: Utility scripts (e.g., for exporting OpenAPI specs).
-- `pyproject.toml` / `uv.lock`: Python dependency management and project configuration.
-- `docker-compose.yml` / `Dockerfile`: Containerization configuration.
+- Python 3.11+
+- Docker
+- `uv`
 
-## Usage
+### Installation
 
-### API Call Using Typescript Client
+Clone the repo:
 
-To use this client in your project, add the following to your `package.json`:
+```bash
+git clone https://github.com/omnsight/omni-osint-query.git
+cd omni-osint-query
+```
+
+Install dependencies:
+
+```bash
+uv lock --upgrade
+uv sync --extra dev
+```
+
+## ⚙️ Configuration
+
+Fill the `.env` file:
+
+```bash
+stage="local"
+
+# ArangoDB
+ARANGODB_HOST="http://localhost:8529"
+ARANGODB_USERNAME="root"
+ARANGODB_PASSWORD="password"
+ARANGODB_DB_NAME="test_osint_db"
+ARANGODB_EMBEDDING_DIMENSION="384"
+
+# Redis
+REDIS_HOST="localhost"
+REDIS_PORT="6379"
+REDIS_PASSWORD=""
+
+# Embedding Model
+EMBEDDING_AI_API_KEY=
+EMBEDDING_AI_API_BASE_URL=
+EMBEDDING_MODEL=
+```
+
+## 📖 Usage
+
+### Running the Service
+
+Start the backend services:
+
+```bash
+docker-compose up -d --build --wait
+```
+
+Stop the backend services when you're done:
+
+```bash
+docker-compose down
+```
+
+### Using the Client
+
+To use the client in your Node.js project, you can install it directly from GitHub. Add the following to your `package.json`:
 
 ```json
 {
   "dependencies": {
-    "omni_osint_query": "github.com/omnsight/omni-osint-query#main"
+    "omni-osint-query": "github:omnsight/omni-osint-query"
   }
 }
 ```
 
-Here is a sample code snippet demonstrating how to use the client to invoke API calls.
+After installation, you can use the client in your application as shown below:
 
 ```typescript
-import { HealthService, OpenAPI } from 'omni_osint_query';
+import { OpenAPI, QueryService, QueryRequest } from 'omni-osint-query/client'; // Adjust path if needed
+
+// Configure the API client
+OpenAPI.BASE = 'http://localhost:8000'; // Adjust if your server runs on a different host/port
+// Configure authentication (e.g., with a bearer token)
+OpenAPI.TOKEN = 'your-bearer-token';
 
 async function main() {
-  // Configure the base URL and a static token
-  OpenAPI.BASE = 'http://localhost:8000';
-  OpenAPI.TOKEN = 'your-static-jwt-token-here';
-
   try {
-    const health = await HealthService.healthCheckHealthGet();
-    console.log('Health check result:', health);
+    const requestBody: QueryRequest = {
+      query: 'your-query-here',
+      sources: ['source1', 'source2'],
+    };
+
+    const response = await QueryService.query(requestBody);
+    console.log('Query Response:', response);
   } catch (error) {
-    console.error('Error fetching health check:', error);
+    console.error('Error during query:', error);
   }
 }
+
+main();
 ```
 
 ## Local Development
 
 Refer to [DEVELOPMENT.md](DEVELOPMENT.md) for local development setup.
+
+## 📄 License
+
+Distributed under the Apache-2.0 License. See [LICENSE](./LICENSE) for more information.
