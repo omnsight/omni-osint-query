@@ -2,11 +2,11 @@ import logging
 from typing import Dict, List
 
 from fastapi import APIRouter, Depends, HTTPException
-from omni_python_library.dal.query_tools.entity_neighborhood import (
+from omni_python_library.dal.query_tools import (
     search_entity_neighborhood,
 )
-from omni_python_library.middleware.user_token import get_user_context
-from omni_python_library.models.osint import (
+from omni_python_library.middleware import get_user_context
+from omni_python_library.models import (
     Event,
     Organization,
     Person,

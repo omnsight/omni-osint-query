@@ -2,9 +2,9 @@ import logging
 from typing import Dict, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
-from omni_python_library.dal.query_tools.event_search import search_events
-from omni_python_library.middleware.user_token import get_user_context
-from omni_python_library.models.osint import (
+from omni_python_library.dal.query_tools import search_events
+from omni_python_library.middleware import get_user_context
+from omni_python_library.models import (
     Event,
     Relation,
 )
