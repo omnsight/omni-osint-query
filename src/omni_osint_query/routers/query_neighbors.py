@@ -16,7 +16,6 @@ from omni_python_library.models import (
 )
 from pydantic import BaseModel, Field
 
-
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/query", tags=["query"])
@@ -30,7 +29,9 @@ class NeighborsResponse(BaseModel):
     events: List[Event] = Field(default_factory=list, description="A list of events related to the entity.")
     sources: List[Source] = Field(default_factory=list, description="A list of sources related to the entity.")
     persons: List[Person] = Field(default_factory=list, description="A list of persons related to the entity.")
-    organizations: List[Organization] = Field(default_factory=list, description="A list of organizations related to the entity.")
+    organizations: List[Organization] = Field(
+        default_factory=list, description="A list of organizations related to the entity."
+    )
     websites: List[Website] = Field(default_factory=list, description="A list of websites related to the entity.")
     relations: List[Relation] = Field(default_factory=list, description="A list of relations related to the entity.")
     limit: int = Field(default=30, description="The maximum number of results to return.")

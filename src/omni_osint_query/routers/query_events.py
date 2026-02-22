@@ -10,7 +10,6 @@ from omni_python_library.models import (
 )
 from pydantic import BaseModel, Field
 
-
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/query", tags=["query"])
