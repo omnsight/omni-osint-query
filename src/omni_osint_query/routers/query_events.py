@@ -8,7 +8,8 @@ from omni_python_library.models import (
     Event,
     Relation,
 )
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+
 
 logger = logging.getLogger(__name__)
 
@@ -16,15 +17,17 @@ router = APIRouter(prefix="/query", tags=["query"])
 
 
 class QueryRequest(BaseModel):
-    query: Optional[str] = None
-    date_start: Optional[int] = None
-    date_end: Optional[int] = None
-    country_code: Optional[str] = None
+    query: Optional[str] = Field(default=None, description="The search query string.")
+    date_start: Optional[int] = Field(default=None, description="The start of the date range for the query.")
+    date_end: Optional[int] = Field(default=None, description="The end of the date range for the query.")
+    country_code: Optional[str] = Field(default=None, description="The country code to filter the query by.")
+    limit: int = Field(default=30, description="The maximum number of results to return.")
+    offset: int = Field(default=0, description="The offset from which to start returning results.")
 
 
 class QueryResponse(BaseModel):
-    events: List[Event] = []
-    relations: List[Relation] = []
+    events: List[Event] = Field(default_factory=list, description="A list of events that match the query.")
+    relations: List[Relation] = Field(default_factory=list, description="A list of relations that match the query.")
 
 
 @router.post("/events", response_model=QueryResponse, operation_id="query_events")
