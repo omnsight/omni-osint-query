@@ -1,9 +1,9 @@
 import jwt
 from fastapi.testclient import TestClient
 from omni_python_library import init_omni_library
-from omni_python_library.clients.arangodb import ArangoDBClient
-from omni_python_library.dal.osint_data_access_layer import OsintDataAccessLayer
-from omni_python_library.models.osint import (
+from omni_python_library.clients import ArangoDBClient
+from omni_python_library.dal import OsintDataAccessLayer
+from omni_python_library.models import (
     EventMainData,
     OrganizationMainData,
     PersonMainData,
