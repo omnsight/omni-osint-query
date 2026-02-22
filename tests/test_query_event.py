@@ -8,7 +8,7 @@ from omni_python_library.models.osint import (
     EventMainData,
     RelationMainData,
 )
-from omni_python_library.utils.user import UserRole
+from omni_python_library.utils.config import UserRole
 
 from omni_osint_query.main import app
 
