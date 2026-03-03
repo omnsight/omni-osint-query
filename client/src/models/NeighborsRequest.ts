@@ -3,6 +3,9 @@
 /* tslint:disable */
 /* eslint-disable */
 export type NeighborsRequest = {
+    /**
+     * The ID of the entity to query for neighbors.
+     */
     entity_id: string;
 };
 
