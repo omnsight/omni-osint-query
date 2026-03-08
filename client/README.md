@@ -1,6 +1,6 @@
 # Omni Osint Query Client
 
-This directory contains the generated TypeScript client for the API.
+This directory contains the generated [TypeScript client](https://www.npmjs.com/package/omni-osint-query-client) for the Omni Osint Query API.
 
 ## Usage
 
