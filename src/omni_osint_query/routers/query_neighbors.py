@@ -23,6 +23,8 @@ router = APIRouter(prefix="/query", tags=["query"])
 
 class NeighborsRequest(BaseModel):
     entity_id: str = Field(description="The ID of the entity to query for neighbors.")
+    limit: int = Field(default=30, description="The maximum number of results to return.")
+    offset: int = Field(default=0, description="The offset from which to start returning results.")
 
 
 class NeighborsResponse(BaseModel):
@@ -34,7 +36,6 @@ class NeighborsResponse(BaseModel):
     )
     websites: List[Website] = Field(default_factory=list, description="A list of websites related to the entity.")
     relations: List[Relation] = Field(default_factory=list, description="A list of relations related to the entity.")
-    limit: int = Field(default=30, description="The maximum number of results to return.")
     offset: int = Field(default=0, description="The offset from which to start returning results.")
 
 
@@ -45,7 +46,8 @@ def query_neighbors(request: NeighborsRequest, user_ctx: Dict = Depends(get_user
             entity_id=request.entity_id,
             owner=user_ctx["user_id"],
             roles=user_ctx["roles"],
-            limit=30,
+            limit=request.limit,
+            offset=request.offset,
         )
 
         return NeighborsResponse(
@@ -55,6 +57,7 @@ def query_neighbors(request: NeighborsRequest, user_ctx: Dict = Depends(get_user
             organizations=[o for o in results if isinstance(o, Organization)],
             websites=[w for w in results if isinstance(w, Website)],
             relations=[r for r in results if isinstance(r, Relation)],
+            offset=request.offset + len(results),
         )
     except Exception:
         logger.exception("Error executing neighbors query")

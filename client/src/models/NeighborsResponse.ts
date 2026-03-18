@@ -34,10 +34,6 @@ export type NeighborsResponse = {
      */
     relations?: Array<Relation>;
     /**
-     * The maximum number of results to return.
-     */
-    limit?: number;
-    /**
      * The offset from which to start returning results.
      */
     offset?: number;

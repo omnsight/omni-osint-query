@@ -27,6 +27,7 @@ class QueryRequest(BaseModel):
 class QueryResponse(BaseModel):
     events: List[Event] = Field(default_factory=list, description="A list of events that match the query.")
     relations: List[Relation] = Field(default_factory=list, description="A list of relations that match the query.")
+    offset: int = Field(default=0, description="The offset from which to start returning results.")
 
 
 @router.post("/events", response_model=QueryResponse, operation_id="query_events")
@@ -38,12 +39,14 @@ def query_events(request: QueryRequest, user_ctx: Dict = Depends(get_user_contex
             text=request.query,
             date_range=(request.date_start, request.date_end),
             country_code=request.country_code,
-            limit=30,
+            limit=request.limit,
+            offset=request.offset,
         )
 
         return QueryResponse(
             events=[e for e in results if isinstance(e, Event)],
             relations=[r for r in results if isinstance(r, Relation)],
+            offset=request.offset + len(results),
         )
     except Exception:
         logger.exception("Error executing query")
