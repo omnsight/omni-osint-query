@@ -13,5 +13,9 @@ export type QueryResponse = {
      * A list of relations that match the query.
      */
     relations?: Array<Relation>;
+    /**
+     * The offset from which to start returning results.
+     */
+    offset?: number;
 };
 

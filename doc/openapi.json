@@ -418,6 +418,18 @@
             "type": "string",
             "title": "Entity Id",
             "description": "The ID of the entity to query for neighbors."
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit",
+            "description": "The maximum number of results to return.",
+            "default": 30
+          },
+          "offset": {
+            "type": "integer",
+            "title": "Offset",
+            "description": "The offset from which to start returning results.",
+            "default": 0
           }
         },
         "type": "object",
@@ -475,12 +487,6 @@
             "type": "array",
             "title": "Relations",
             "description": "A list of relations related to the entity."
-          },
-          "limit": {
-            "type": "integer",
-            "title": "Limit",
-            "description": "The maximum number of results to return.",
-            "default": 30
           },
           "offset": {
             "type": "integer",
@@ -930,6 +936,12 @@
             "type": "array",
             "title": "Relations",
             "description": "A list of relations that match the query."
+          },
+          "offset": {
+            "type": "integer",
+            "title": "Offset",
+            "description": "The offset from which to start returning results.",
+            "default": 0
           }
         },
         "type": "object",
