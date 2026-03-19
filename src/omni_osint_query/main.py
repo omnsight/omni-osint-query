@@ -31,6 +31,7 @@ async def http_exception_handler(request: Request, exc: HTTPException):
         content={"detail": exc.detail},
     )
 
+
 # Include routers
 app.include_router(query_router)
 app.include_router(neighbors_router)
