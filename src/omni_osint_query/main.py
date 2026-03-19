@@ -20,6 +20,9 @@ async def lifespan(app: FastAPI):
     yield
 
 
+app = FastAPI(title="Omni OSINT Query", lifespan=lifespan)
+
+
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request: Request, exc: HTTPException):
     logger.error(f"HTTPException: {exc.status_code} {exc.detail}")
@@ -27,9 +30,6 @@ async def http_exception_handler(request: Request, exc: HTTPException):
         status_code=exc.status_code,
         content={"detail": exc.detail},
     )
-
-
-app = FastAPI(title="Omni OSINT Query", lifespan=lifespan)
 
 # Include routers
 app.include_router(query_router)
