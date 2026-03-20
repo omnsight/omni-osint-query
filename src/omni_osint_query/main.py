@@ -1,4 +1,6 @@
 import logging
+import os
+import sys
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Request
@@ -11,13 +13,20 @@ from omni_osint_query.routers import (
     query_router,
 )
 
+# Configure logging
+DEBUG = os.getenv("DEBUG", "false").lower() == "true"
+log_level = logging.DEBUG if DEBUG else logging.INFO
+logging.basicConfig(stream=sys.stdout, level=log_level, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+
 logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    logger.info("Application startup")
     init_omni_library()
     yield
+    logger.info("Application shutdown")
 
 
 app = FastAPI(title="Omni OSINT Query", lifespan=lifespan)
