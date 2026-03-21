@@ -33,6 +33,7 @@ class QueryResponse(BaseModel):
 @router.post("/events", response_model=QueryResponse, operation_id="query_events")
 def query_events(request: QueryRequest, user_ctx: Dict = Depends(get_user_context)):
     try:
+        logger.info(f"Querying events with request: {request}")
         results = search_events(
             owner=user_ctx["user_id"],
             roles=user_ctx["roles"],

@@ -42,6 +42,7 @@ class NeighborsResponse(BaseModel):
 @router.post("/neighbors", response_model=NeighborsResponse, operation_id="query_neighbors")
 def query_neighbors(request: NeighborsRequest, user_ctx: Dict = Depends(get_user_context)):
     try:
+        logger.info(f"Querying neighbors of entity: {request.entity_id}")
         results = search_entity_neighborhood(
             entity_id=request.entity_id,
             owner=user_ctx["user_id"],
