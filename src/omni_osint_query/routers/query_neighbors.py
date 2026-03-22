@@ -1,7 +1,7 @@
 import logging
 from typing import Dict, List
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from omni_python_library.dal.query_tools import (
     search_entity_neighborhood,
 )
@@ -18,13 +18,7 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/query", tags=["query"])
-
-
-class NeighborsRequest(BaseModel):
-    entity_id: str = Field(description="The ID of the entity to query for neighbors.")
-    limit: int = Field(default=30, description="The maximum number of results to return.")
-    offset: int = Field(default=0, description="The offset from which to start returning results.")
+router = APIRouter(tags=["query"])
 
 
 class NeighborsResponse(BaseModel):
@@ -39,16 +33,21 @@ class NeighborsResponse(BaseModel):
     offset: int = Field(default=0, description="The offset from which to start returning results.")
 
 
-@router.post("/neighbors", response_model=NeighborsResponse, operation_id="query_neighbors")
-def query_neighbors(request: NeighborsRequest, user_ctx: Dict = Depends(get_user_context)):
+@router.get("/entities/{id:path}/neighbors", response_model=NeighborsResponse, operation_id="query_neighbors")
+def query_neighbors(
+    id: str,
+    user_ctx: Dict = Depends(get_user_context),
+    limit: int = Query(default=30, description="The maximum number of results to return."),
+    offset: int = Query(default=0, description="The offset from which to start returning results."),
+):
     try:
-        logger.info(f"Querying neighbors of entity: {request.entity_id}")
+        logger.info(f"Querying neighbors of entity: {id}")
         results = search_entity_neighborhood(
-            entity_id=request.entity_id,
+            entity_id=id,
             owner=user_ctx["user_id"],
             roles=user_ctx["roles"],
-            limit=request.limit,
-            offset=request.offset,
+            limit=limit,
+            offset=offset,
         )
 
         return NeighborsResponse(
@@ -58,7 +57,7 @@ def query_neighbors(request: NeighborsRequest, user_ctx: Dict = Depends(get_user
             organizations=[o for o in results if isinstance(o, Organization)],
             websites=[w for w in results if isinstance(w, Website)],
             relations=[r for r in results if isinstance(r, Relation)],
-            offset=request.offset + len(results),
+            offset=offset + len(results),
         )
     except Exception:
         logger.exception("Error executing neighbors query")

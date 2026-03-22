@@ -21,27 +21,19 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
 /**
  * Query Events
  */
-export const queryEvents = <ThrowOnError extends boolean = false>(options: Options<QueryEventsData, ThrowOnError>) => (options.client ?? client).post<QueryEventsResponses, QueryEventsErrors, ThrowOnError>({
+export const queryEvents = <ThrowOnError extends boolean = false>(options?: Options<QueryEventsData, ThrowOnError>) => (options?.client ?? client).post<QueryEventsResponses, QueryEventsErrors, ThrowOnError>({
     responseType: 'json',
-    url: '/query/events',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
+    url: '/events',
+    ...options
 });
 
 /**
  * Query Neighbors
  */
-export const queryNeighbors = <ThrowOnError extends boolean = false>(options: Options<QueryNeighborsData, ThrowOnError>) => (options.client ?? client).post<QueryNeighborsResponses, QueryNeighborsErrors, ThrowOnError>({
+export const queryNeighbors = <ThrowOnError extends boolean = false>(options: Options<QueryNeighborsData, ThrowOnError>) => (options.client ?? client).get<QueryNeighborsResponses, QueryNeighborsErrors, ThrowOnError>({
     responseType: 'json',
-    url: '/query/neighbors',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
+    url: '/entities/{id}/neighbors',
+    ...options
 });
 
 /**

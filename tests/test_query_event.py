@@ -67,8 +67,8 @@ class TestEvent:
         assert len(results) == 3, f"{results}"
 
         response = self.client.post(
-            "/query/events",
-            json={
+            "/events",
+            params={
                 "date_start": 0,
                 "date_end": 1000000000,
             },
@@ -86,6 +86,6 @@ class TestEvent:
 
         with patch("omni_osint_query.routers.query_events.search_events") as mock_search:
             mock_search.side_effect = Exception("Test exception")
-            response = self.client.post("/query/events", json={})
+            response = self.client.post("/events")
             assert response.status_code == 500
             assert response.json() == {"detail": "Internal server error"}

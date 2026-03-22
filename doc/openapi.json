@@ -5,7 +5,7 @@
     "version": "0.1.0"
   },
   "paths": {
-    "/query/events": {
+    "/events": {
       "post": {
         "tags": [
           "query"
@@ -13,6 +13,102 @@
         "summary": "Query Events",
         "operationId": "query_events",
         "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The search query string.",
+              "title": "Query"
+            },
+            "description": "The search query string."
+          },
+          {
+            "name": "date_start",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The start of the date range for the query.",
+              "title": "Date Start"
+            },
+            "description": "The start of the date range for the query."
+          },
+          {
+            "name": "date_end",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The end of the date range for the query.",
+              "title": "Date End"
+            },
+            "description": "The end of the date range for the query."
+          },
+          {
+            "name": "country_code",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The country code to filter the query by.",
+              "title": "Country Code"
+            },
+            "description": "The country code to filter the query by."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "The maximum number of results to return.",
+              "default": 30,
+              "title": "Limit"
+            },
+            "description": "The maximum number of results to return."
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "The offset from which to start returning results.",
+              "default": 0,
+              "title": "Offset"
+            },
+            "description": "The offset from which to start returning results."
+          },
           {
             "name": "authorization",
             "in": "header",
@@ -30,16 +126,6 @@
             }
           }
         ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/QueryRequest"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -64,14 +150,47 @@
         }
       }
     },
-    "/query/neighbors": {
-      "post": {
+    "/entities/{id}/neighbors": {
+      "get": {
         "tags": [
           "query"
         ],
         "summary": "Query Neighbors",
         "operationId": "query_neighbors",
         "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "The maximum number of results to return.",
+              "default": 30,
+              "title": "Limit"
+            },
+            "description": "The maximum number of results to return."
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "The offset from which to start returning results.",
+              "default": 0,
+              "title": "Offset"
+            },
+            "description": "The offset from which to start returning results."
+          },
           {
             "name": "authorization",
             "in": "header",
@@ -89,16 +208,6 @@
             }
           }
         ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NeighborsRequest"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -411,32 +520,6 @@
         ],
         "title": "LocationData",
         "description": "Represents geographical location data."
-      },
-      "NeighborsRequest": {
-        "properties": {
-          "entity_id": {
-            "type": "string",
-            "title": "Entity Id",
-            "description": "The ID of the entity to query for neighbors."
-          },
-          "limit": {
-            "type": "integer",
-            "title": "Limit",
-            "description": "The maximum number of results to return.",
-            "default": 30
-          },
-          "offset": {
-            "type": "integer",
-            "title": "Offset",
-            "description": "The offset from which to start returning results.",
-            "default": 0
-          }
-        },
-        "type": "object",
-        "required": [
-          "entity_id"
-        ],
-        "title": "NeighborsRequest"
       },
       "NeighborsResponse": {
         "properties": {
@@ -852,72 +935,6 @@
         "type": "object",
         "title": "Person",
         "description": "Represents a person."
-      },
-      "QueryRequest": {
-        "properties": {
-          "query": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Query",
-            "description": "The search query string."
-          },
-          "date_start": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Date Start",
-            "description": "The start of the date range for the query."
-          },
-          "date_end": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Date End",
-            "description": "The end of the date range for the query."
-          },
-          "country_code": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Country Code",
-            "description": "The country code to filter the query by."
-          },
-          "limit": {
-            "type": "integer",
-            "title": "Limit",
-            "description": "The maximum number of results to return.",
-            "default": 30
-          },
-          "offset": {
-            "type": "integer",
-            "title": "Offset",
-            "description": "The offset from which to start returning results.",
-            "default": 0
-          }
-        },
-        "type": "object",
-        "title": "QueryRequest"
       },
       "QueryResponse": {
         "properties": {

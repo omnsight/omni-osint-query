@@ -23,7 +23,7 @@ describe('QueryEvents', () => {
 
   it('should return a health check', async () => {
     const {data, error, status} = await queryEvents({
-      body: {
+      query: {
         query: "",
         date_start: Math.floor(Date.now() / 1000 - 60 * 60),
         date_end: Math.floor(Date.now() / 1000 + 60 * 60),
