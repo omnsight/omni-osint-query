@@ -6,7 +6,7 @@
   },
   "paths": {
     "/events": {
-      "post": {
+      "get": {
         "tags": [
           "query"
         ],

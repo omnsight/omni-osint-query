@@ -21,15 +21,15 @@ class QueryResponse(BaseModel):
     offset: int = Field(default=0, description="The offset from which to start returning results.")
 
 
-@router.post("/events", response_model=QueryResponse, operation_id="query_events")
+@router.get("/events", response_model=QueryResponse, operation_id="query_events")
 def query_events(
-    user_ctx: Dict = Depends(get_user_context),
     query: Optional[str] = Query(default=None, description="The search query string."),
     date_start: Optional[int] = Query(default=None, description="The start of the date range for the query."),
     date_end: Optional[int] = Query(default=None, description="The end of the date range for the query."),
     country_code: Optional[str] = Query(default=None, description="The country code to filter the query by."),
     limit: int = Query(default=30, description="The maximum number of results to return."),
     offset: int = Query(default=0, description="The offset from which to start returning results."),
+    user_ctx: Dict = Depends(get_user_context),
 ):
     try:
         logger.info(

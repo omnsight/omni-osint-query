@@ -21,7 +21,7 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
 /**
  * Query Events
  */
-export const queryEvents = <ThrowOnError extends boolean = false>(options?: Options<QueryEventsData, ThrowOnError>) => (options?.client ?? client).post<QueryEventsResponses, QueryEventsErrors, ThrowOnError>({
+export const queryEvents = <ThrowOnError extends boolean = false>(options?: Options<QueryEventsData, ThrowOnError>) => (options?.client ?? client).get<QueryEventsResponses, QueryEventsErrors, ThrowOnError>({
     responseType: 'json',
     url: '/events',
     ...options
