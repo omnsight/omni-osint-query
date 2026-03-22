@@ -77,7 +77,7 @@ class TestNeighbors:
             roles=[UserRole.ADMIN],
         )
 
-        response = self.client.post("/query/neighbors", json={"entity_id": event.id})
+        response = self.client.get(f"/entities/{event.id}/neighbors?limit=10&offset=0")
 
         assert response.status_code == 200
         data = response.json()
@@ -97,6 +97,6 @@ class TestNeighbors:
 
         with patch("omni_osint_query.routers.query_neighbors.search_entity_neighborhood") as mock_search:
             mock_search.side_effect = Exception("Test exception")
-            response = self.client.post("/query/neighbors", json={"entity_id": "any_id"})
+            response = self.client.get("/entities/any_id/neighbors")
             assert response.status_code == 500
             assert response.json() == {"detail": "Internal server error"}

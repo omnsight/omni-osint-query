@@ -187,30 +187,6 @@ export type LocationData = {
 };
 
 /**
- * NeighborsRequest
- */
-export type NeighborsRequest = {
-    /**
-     * Entity Id
-     *
-     * The ID of the entity to query for neighbors.
-     */
-    entity_id: string;
-    /**
-     * Limit
-     *
-     * The maximum number of results to return.
-     */
-    limit?: number;
-    /**
-     * Offset
-     *
-     * The offset from which to start returning results.
-     */
-    offset?: number;
-};
-
-/**
  * NeighborsResponse
  */
 export type NeighborsResponse = {
@@ -456,48 +432,6 @@ export type Person = {
      * Data update timestamp
      */
     updated_at?: number | null;
-};
-
-/**
- * QueryRequest
- */
-export type QueryRequest = {
-    /**
-     * Query
-     *
-     * The search query string.
-     */
-    query?: string | null;
-    /**
-     * Date Start
-     *
-     * The start of the date range for the query.
-     */
-    date_start?: number | null;
-    /**
-     * Date End
-     *
-     * The end of the date range for the query.
-     */
-    date_end?: number | null;
-    /**
-     * Country Code
-     *
-     * The country code to filter the query by.
-     */
-    country_code?: string | null;
-    /**
-     * Limit
-     *
-     * The maximum number of results to return.
-     */
-    limit?: number;
-    /**
-     * Offset
-     *
-     * The offset from which to start returning results.
-     */
-    offset?: number;
 };
 
 /**
@@ -859,7 +793,7 @@ export type Website = {
 };
 
 export type QueryEventsData = {
-    body: QueryRequest;
+    body?: never;
     headers?: {
         /**
          * Authorization
@@ -867,8 +801,45 @@ export type QueryEventsData = {
         authorization?: string | null;
     };
     path?: never;
-    query?: never;
-    url: '/query/events';
+    query?: {
+        /**
+         * Query
+         *
+         * The search query string.
+         */
+        query?: string | null;
+        /**
+         * Date Start
+         *
+         * The start of the date range for the query.
+         */
+        date_start?: number | null;
+        /**
+         * Date End
+         *
+         * The end of the date range for the query.
+         */
+        date_end?: number | null;
+        /**
+         * Country Code
+         *
+         * The country code to filter the query by.
+         */
+        country_code?: string | null;
+        /**
+         * Limit
+         *
+         * The maximum number of results to return.
+         */
+        limit?: number;
+        /**
+         * Offset
+         *
+         * The offset from which to start returning results.
+         */
+        offset?: number;
+    };
+    url: '/events';
 };
 
 export type QueryEventsErrors = {
@@ -890,16 +861,34 @@ export type QueryEventsResponses = {
 export type QueryEventsResponse = QueryEventsResponses[keyof QueryEventsResponses];
 
 export type QueryNeighborsData = {
-    body: NeighborsRequest;
+    body?: never;
     headers?: {
         /**
          * Authorization
          */
         authorization?: string | null;
     };
-    path?: never;
-    query?: never;
-    url: '/query/neighbors';
+    path: {
+        /**
+         * Id
+         */
+        id: string;
+    };
+    query?: {
+        /**
+         * Limit
+         *
+         * The maximum number of results to return.
+         */
+        limit?: number;
+        /**
+         * Offset
+         *
+         * The offset from which to start returning results.
+         */
+        offset?: number;
+    };
+    url: '/entities/{id}/neighbors';
 };
 
 export type QueryNeighborsErrors = {
