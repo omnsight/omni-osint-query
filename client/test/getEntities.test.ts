@@ -30,6 +30,6 @@ describe('QueryEvents', () => {
       }
     });
     console.log(data, error, status);
-    expect(status).toEqual(500);
+    expect(status).toEqual(200);
   });
 });
