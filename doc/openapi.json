@@ -483,7 +483,8 @@
           "sub_administrative_area": {
             "type": "string",
             "title": "Sub Administrative Area",
-            "description": "Sub-administrative area"
+            "description": "Sub-administrative area",
+            "default": ""
           },
           "locality": {
             "type": "string",
@@ -493,7 +494,8 @@
           "sub_locality": {
             "type": "string",
             "title": "Sub Locality",
-            "description": "Sub-locality"
+            "description": "Sub-locality",
+            "default": ""
           },
           "address": {
             "type": "string",
@@ -512,9 +514,7 @@
           "longitude",
           "country_code",
           "administrative_area",
-          "sub_administrative_area",
           "locality",
-          "sub_locality",
           "address",
           "postal_code"
         ],
