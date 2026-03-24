@@ -1,10 +1,14 @@
 # Git
 .git
 .gitignore
+.github
 
 # Docker
 Dockerfile
 
-# Tests
-client/test
+client
 tests
+doc
+scripts
+*.md
+*.env*
