@@ -17,7 +17,6 @@ from omni_osint_query.routers import (
 DEBUG = os.getenv("DEBUG", "false").lower() == "true"
 log_level = logging.DEBUG if DEBUG else logging.INFO
 logging.basicConfig(stream=sys.stdout, level=log_level, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-
 logger = logging.getLogger(__name__)
 
 
