@@ -32,10 +32,48 @@ class TestEvent:
         cls.no_roles_client = TestClient(app)
         cls.no_roles_client.headers = {"Authorization": f"Bearer {no_roles_token}"}
 
-    def setUp(self):
+    def setup_method(self):
         # Clear DB collections before each test
         for col_name in ArangoDBClient()._collections:
             ArangoDBClient()._collections[col_name].truncate()
+
+    def test_execute_query_no_relations(self):
+        event1 = OsintDataAccessLayer().create_event(
+            EventMainData(
+                title="Test Event 1",
+                happened_at=124,
+            ),
+            owner="test-user-id-123",
+            roles=[UserRole.ADMIN],
+        )
+        event2 = OsintDataAccessLayer().create_event(
+            EventMainData(
+                title="Test Event 2",
+                happened_at=2000,
+            ),
+            owner="test-user-id-123",
+            roles=[UserRole.ADMIN],
+        )
+        results = search_events(
+            owner="test-user-id-123",
+            roles=[UserRole.ADMIN],
+            date_range=(0, 2500),
+        )
+        assert len(results) == 2, f"{results}"
+
+        response = self.client.get(
+            "/events",
+            params={
+                "date_start": 0,
+                "date_end": 1000000000,
+            },
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        assert len(data["events"]) == 2
+        assert {e["_id"] for e in data["events"]} == {event1.id, event2.id}
+        assert len(data["relations"]) == 0
 
     def test_execute_query(self):
         event1 = OsintDataAccessLayer().create_event(

@@ -35,7 +35,7 @@ class TestNeighbors:
         cls.no_roles_client = TestClient(app)
         cls.no_roles_client.headers = {"Authorization": f"Bearer {no_roles_token}"}
 
-    def setUp(self):
+    def setup_method(self):
         # Clear DB collections before each test
         for col_name in ArangoDBClient()._collections:
             ArangoDBClient()._collections[col_name].truncate()
