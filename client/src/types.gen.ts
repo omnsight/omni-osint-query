@@ -341,6 +341,12 @@ export type Organization = {
  */
 export type Person = {
     /**
+     * Type
+     *
+     * Role type of person
+     */
+    type?: string | null;
+    /**
      * Role
      *
      * Role
@@ -692,6 +698,12 @@ export type ValidationError = {
  * Represents a website.
  */
 export type Website = {
+    /**
+     * Type
+     *
+     * Type of website
+     */
+    type?: string | null;
     /**
      * Url
      *
