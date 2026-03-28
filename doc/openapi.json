@@ -192,6 +192,34 @@
             "description": "The offset from which to start returning results."
           },
           {
+            "name": "include",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "A list of entity types to include.",
+              "title": "Include"
+            },
+            "description": "A list of entity types to include."
+          },
+          {
+            "name": "exclude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "A list of entity types to exclude.",
+              "title": "Exclude"
+            },
+            "description": "A list of entity types to exclude."
+          },
+          {
             "name": "authorization",
             "in": "header",
             "required": false,
@@ -208,6 +236,121 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NeighborsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/entities/neighbors": {
+      "post": {
+        "tags": [
+          "query"
+        ],
+        "summary": "Query Neighbors Batch",
+        "operationId": "query_neighbors_batch",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "The maximum number of results to return.",
+              "default": 30,
+              "title": "Limit"
+            },
+            "description": "The maximum number of results to return."
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "The offset from which to start returning results.",
+              "default": 0,
+              "title": "Offset"
+            },
+            "description": "The offset from which to start returning results."
+          },
+          {
+            "name": "include",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "A list of entity types to include.",
+              "title": "Include"
+            },
+            "description": "A list of entity types to include."
+          },
+          {
+            "name": "exclude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "A list of entity types to exclude.",
+              "title": "Exclude"
+            },
+            "description": "A list of entity types to exclude."
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "title": "Ids"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
