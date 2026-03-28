@@ -2,9 +2,8 @@ import logging
 from typing import Dict, List
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from omni_python_library.dal.query_tools import search_entity_neighborhood
 from omni_python_library.dal.osint_data_access_layer import OsintDataAccessLayer
-from omni_python_library.utils.config import ArangoDBConstant
+from omni_python_library.dal.query_tools import search_entity_neighborhood
 from omni_python_library.middleware import get_user_context
 from omni_python_library.models import (
     Event,
@@ -14,6 +13,7 @@ from omni_python_library.models import (
     Source,
     Website,
 )
+from omni_python_library.utils.config import ArangoDBConstant
 from pydantic import BaseModel, Field
 
 logger = logging.getLogger(__name__)
@@ -67,7 +67,9 @@ def query_neighbors(
             persons=[p for p in results if isinstance(p, Person)],
             organizations=[o for o in results if isinstance(o, Organization)],
             websites=[w for w in results if isinstance(w, Website)],
-            relations=[r for r in results if isinstance(r, Relation) and r.from_id in result_ids and r.to_id in result_ids],
+            relations=[
+                r for r in results if isinstance(r, Relation) and r.from_id in result_ids and r.to_id in result_ids
+            ],
             offset=offset + len(results),
         )
     except Exception:
@@ -86,7 +88,13 @@ def query_neighbors_batch(
 ):
     try:
         logger.info(f"Querying neighbors of entities: {ids}")
-        bind_vars = {"entity_ids": ids, "limit": limit, "offset": offset, "owner": user_ctx["user_id"], "roles": user_ctx["roles"]}
+        bind_vars = {
+            "entity_ids": ids,
+            "limit": limit,
+            "offset": offset,
+            "owner": user_ctx["user_id"],
+            "roles": user_ctx["roles"],
+        }
 
         query = f"""
             LET all_neighbors = (
@@ -124,7 +132,11 @@ def query_neighbors_batch(
             persons=[p for p in unique_results if isinstance(p, Person)],
             organizations=[o for o in unique_results if isinstance(o, Organization)],
             websites=[w for w in unique_results if isinstance(w, Website)],
-            relations=[r for r in unique_results if isinstance(r, Relation) and r.from_id in result_ids and r.to_id in result_ids],
+            relations=[
+                r
+                for r in unique_results
+                if isinstance(r, Relation) and r.from_id in result_ids and r.to_id in result_ids
+            ],
             offset=offset + len(list(unique_results)),
         )
     except Exception:
