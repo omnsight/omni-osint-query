@@ -1,3 +1,5 @@
+from urllib.parse import quote
+
 import jwt
 from fastapi.testclient import TestClient
 from omni_python_library import init_omni_library
@@ -18,7 +20,6 @@ from omni_osint_query.main import app
 
 class TestNeighbors:
     client: TestClient
-    no_roles_client: TestClient
 
     @classmethod
     def setup_class(cls):
@@ -28,12 +29,6 @@ class TestNeighbors:
         token = jwt.encode(payload, key=None, algorithm="none")
         cls.client = TestClient(app)
         cls.client.headers = {"Authorization": f"Bearer {token}"}
-
-        # Client with no roles
-        no_roles_payload = {"sub": "test-user-id-456", "roles": []}
-        no_roles_token = jwt.encode(no_roles_payload, key=None, algorithm="none")
-        cls.no_roles_client = TestClient(app)
-        cls.no_roles_client.headers = {"Authorization": f"Bearer {no_roles_token}"}
 
     def setup_method(self):
         # Clear DB collections before each test
@@ -97,6 +92,168 @@ class TestNeighbors:
 
         with patch("omni_osint_query.routers.query_neighbors.search_entity_neighborhood") as mock_search:
             mock_search.side_effect = Exception("Test exception")
-            response = self.client.get("/entities/any_id/neighbors")
+            response = self.client.get("/entities/any/id/neighbors")
             assert response.status_code == 500
             assert response.json() == {"detail": "Internal server error"}
+
+    def test_get_neighbors_include(self):
+        dal = OsintDataAccessLayer()
+        person = dal.create_person(
+            PersonMainData(first_name="John", last_name="Doe"),
+            owner="test-user-id-123",
+            roles=[UserRole.ADMIN],
+        )
+        event = dal.create_event(EventMainData(title="Test Event"), owner="test-user-id-123", roles=[UserRole.ADMIN])
+        dal.create_relation(
+            RelationMainData(from_id=event.id, to_id=person.id, name="participant"),
+            owner="test-user-id-123",
+            roles=[UserRole.ADMIN],
+        )
+
+        response = self.client.get(f"/entities/{event.id}/neighbors?include=Person")
+
+        assert response.status_code == 200
+        data = response.json()
+
+        assert len(data["persons"]) == 1
+        assert data["persons"][0]["_id"] == person.id
+        assert len(data["organizations"]) == 0
+        assert len(data["sources"]) == 0
+        assert len(data["websites"]) == 0
+        assert len(data["relations"]) == 1
+
+    def test_get_neighbors_batch_exception(self):
+        from unittest.mock import patch
+
+        with patch("omni_osint_query.routers.query_neighbors.OsintDataAccessLayer.query") as mock_search:
+            mock_search.side_effect = Exception("Test exception")
+            response = self.client.get(f"/entities/neighbors?ids=any_id")
+            assert response.status_code == 500
+            assert response.json() == {"detail": "Internal server error"}
+
+    def test_get_neighbors_batch(self):
+        dal = OsintDataAccessLayer()
+        person = dal.create_person(
+            PersonMainData(first_name="John", last_name="Doe"),
+            owner="test-user-id-123",
+            roles=[UserRole.ADMIN],
+        )
+        event1 = dal.create_event(EventMainData(title="Test Event 1"), owner="test-user-id-123", roles=[UserRole.ADMIN])
+        event2 = dal.create_event(EventMainData(title="Test Event 2"), owner="test-user-id-123", roles=[UserRole.ADMIN])
+        dal.create_relation(
+            RelationMainData(from_id=event1.id, to_id=person.id, name="participant"),
+            owner="test-user-id-123",
+            roles=[UserRole.ADMIN],
+        )
+        dal.create_relation(
+            RelationMainData(from_id=event2.id, to_id=person.id, name="participant"),
+            owner="test-user-id-123",
+            roles=[UserRole.ADMIN],
+        )
+
+        response = self.client.get(
+            f"/entities/neighbors?ids={quote(event1.id, safe='')}&ids={quote(event2.id, safe='')}"
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+
+        assert len(data["persons"]) == 1
+        assert data["persons"][0]["_id"] == person.id
+        assert len(data["relations"]) == 2
+
+    def test_get_neighbors_batch_include(self):
+        dal = OsintDataAccessLayer()
+        person = dal.create_person(
+            PersonMainData(first_name="John", last_name="Doe"),
+            owner="test-user-id-123",
+            roles=[UserRole.ADMIN],
+        )
+        event = dal.create_event(EventMainData(title="Test Event"), owner="test-user-id-123", roles=[UserRole.ADMIN])
+        org = dal.create_organization(
+            OrganizationMainData(name="Test Org"), owner="test-user-id-123", roles=[UserRole.ADMIN]
+        )
+        dal.create_relation(
+            RelationMainData(from_id=event.id, to_id=person.id, name="participant"),
+            owner="test-user-id-123",
+            roles=[UserRole.ADMIN],
+        )
+        dal.create_relation(
+            RelationMainData(from_id=event.id, to_id=org.id, name="location"),
+            owner="test-user-id-123",
+            roles=[UserRole.ADMIN],
+        )
+
+        response = self.client.get(f"/entities/neighbors?include=Person&ids={quote(event.id, safe='')}")
+
+        assert response.status_code == 200
+        data = response.json()
+
+        assert len(data["persons"]) == 1
+        assert data["persons"][0]["_id"] == person.id
+        assert len(data["organizations"]) == 0
+        assert len(data["relations"]) == 1
+
+    def test_get_neighbors_batch_exclude(self):
+        dal = OsintDataAccessLayer()
+        person = dal.create_person(
+            PersonMainData(first_name="John", last_name="Doe"),
+            owner="test-user-id-123",
+            roles=[UserRole.ADMIN],
+        )
+        event = dal.create_event(EventMainData(title="Test Event"), owner="test-user-id-123", roles=[UserRole.ADMIN])
+        org = dal.create_organization(
+            OrganizationMainData(name="Test Org"), owner="test-user-id-123", roles=[UserRole.ADMIN]
+        )
+        dal.create_relation(
+            RelationMainData(from_id=event.id, to_id=person.id, name="participant"),
+            owner="test-user-id-123",
+            roles=[UserRole.ADMIN],
+        )
+        dal.create_relation(
+            RelationMainData(from_id=event.id, to_id=org.id, name="location"),
+            owner="test-user-id-123",
+            roles=[UserRole.ADMIN],
+        )
+
+        response = self.client.get(f"/entities/neighbors?exclude=Person&ids={quote(event.id, safe='')}")
+
+        assert response.status_code == 200
+        data = response.json()
+
+        assert len(data["persons"]) == 0
+        assert len(data["organizations"]) == 1
+        assert data["organizations"][0]["_id"] == org.id
+        assert len(data["relations"]) == 1
+
+    def test_get_neighbors_exclude(self):
+        dal = OsintDataAccessLayer()
+        person = dal.create_person(
+            PersonMainData(first_name="John", last_name="Doe"),
+            owner="test-user-id-123",
+            roles=[UserRole.ADMIN],
+        )
+        event = dal.create_event(EventMainData(title="Test Event"), owner="test-user-id-123", roles=[UserRole.ADMIN])
+        org = dal.create_organization(
+            OrganizationMainData(name="Test Org"), owner="test-user-id-123", roles=[UserRole.ADMIN]
+        )
+        dal.create_relation(
+            RelationMainData(from_id=event.id, to_id=person.id, name="participant"),
+            owner="test-user-id-123",
+            roles=[UserRole.ADMIN],
+        )
+        dal.create_relation(
+            RelationMainData(from_id=event.id, to_id=org.id, name="location"),
+            owner="test-user-id-123",
+            roles=[UserRole.ADMIN],
+        )
+
+        response = self.client.get(f"/entities/{event.id}/neighbors?exclude=Person")
+
+        assert response.status_code == 200
+        data = response.json()
+
+        assert len(data["persons"]) == 0
+        assert len(data["organizations"]) == 1
+        assert data["organizations"][0]["_id"] == org.id
+        assert len(data["relations"]) == 1

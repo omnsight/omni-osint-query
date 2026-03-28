@@ -883,6 +883,8 @@ export type QueryNeighborsData = {
     path: {
         /**
          * Id
+         *
+         * The ArangoDB Document ID (e.g., collection/123)
          */
         id: string;
     };
@@ -899,6 +901,18 @@ export type QueryNeighborsData = {
          * The offset from which to start returning results.
          */
         offset?: number;
+        /**
+         * Include
+         *
+         * A list of entity types to include.
+         */
+        include?: Array<string>;
+        /**
+         * Exclude
+         *
+         * A list of entity types to exclude.
+         */
+        exclude?: Array<string>;
     };
     url: '/entities/{id}/neighbors';
 };
@@ -920,6 +934,68 @@ export type QueryNeighborsResponses = {
 };
 
 export type QueryNeighborsResponse = QueryNeighborsResponses[keyof QueryNeighborsResponses];
+
+export type QueryNeighborsBatchData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Ids
+         *
+         * A list of entity IDs to query neighbors for.
+         */
+        ids?: Array<string>;
+        /**
+         * Limit
+         *
+         * The maximum number of results to return.
+         */
+        limit?: number;
+        /**
+         * Offset
+         *
+         * The offset from which to start returning results.
+         */
+        offset?: number;
+        /**
+         * Include
+         *
+         * A list of entity types to include.
+         */
+        include?: Array<string>;
+        /**
+         * Exclude
+         *
+         * A list of entity types to exclude.
+         */
+        exclude?: Array<string>;
+    };
+    url: '/entities/neighbors';
+};
+
+export type QueryNeighborsBatchErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type QueryNeighborsBatchError = QueryNeighborsBatchErrors[keyof QueryNeighborsBatchErrors];
+
+export type QueryNeighborsBatchResponses = {
+    /**
+     * Successful Response
+     */
+    200: NeighborsResponse;
+};
+
+export type QueryNeighborsBatchResponse = QueryNeighborsBatchResponses[keyof QueryNeighborsBatchResponses];
 
 export type HealthCheckData = {
     body?: never;
