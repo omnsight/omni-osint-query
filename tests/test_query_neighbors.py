@@ -12,6 +12,7 @@ from omni_python_library.models import (
     RelationMainData,
     SourceMainData,
     WebsiteMainData,
+    Permissive,
 )
 from omni_python_library.utils.config import UserRole
 
@@ -20,6 +21,7 @@ from omni_osint_query.main import app
 
 class TestNeighbors:
     client: TestClient
+    guest_client: TestClient
 
     @classmethod
     def setup_class(cls):
@@ -30,6 +32,8 @@ class TestNeighbors:
         cls.client = TestClient(app)
         cls.client.headers = {"Authorization": f"Bearer {token}"}
 
+        cls.guest_client = TestClient(app)
+
     def setup_method(self):
         # Clear DB collections before each test
         for col_name in ArangoDBClient()._collections:
@@ -39,6 +43,14 @@ class TestNeighbors:
         dal = OsintDataAccessLayer()
         person = dal.create_person(
             PersonMainData(first_name="John", last_name="Doe"),
+            owner="test-user-id-123",
+            roles=[UserRole.ADMIN],
+        )
+        dal.update_person(
+            person.id,
+            Permissive(
+                read=[UserRole.GUEST],
+            ),
             owner="test-user-id-123",
             roles=[UserRole.ADMIN],
         )
@@ -73,10 +85,8 @@ class TestNeighbors:
         )
 
         response = self.client.get(f"/entities/{event.id}/neighbors?limit=10&offset=0")
-
         assert response.status_code == 200
         data = response.json()
-
         assert len(data["persons"]) == 1, f"{data}"
         assert data["persons"][0]["_id"] == person.id
         assert len(data["organizations"]) == 1
@@ -86,6 +96,16 @@ class TestNeighbors:
         assert len(data["websites"]) == 1
         assert data["websites"][0]["_id"] == website.id
         assert len(data["relations"]) == 4
+
+        response = self.guest_client.get(f"/entities/{event.id}/neighbors?limit=10&offset=0")
+        assert response.status_code == 200
+        data = response.json()
+        assert len(data["persons"]) == 1, f"{data}"
+        assert data["persons"][0]["_id"] == person.id
+        assert len(data["organizations"]) == 0
+        assert len(data["sources"]) == 0
+        assert len(data["websites"]) == 0
+        assert len(data["relations"]) == 1
 
     def test_get_neighbors_exception(self):
         from unittest.mock import patch

@@ -3,10 +3,10 @@ from fastapi.testclient import TestClient
 from omni_python_library import init_omni_library
 from omni_python_library.clients import ArangoDBClient
 from omni_python_library.dal import OsintDataAccessLayer
-from omni_python_library.dal.query_tools import search_events
 from omni_python_library.models import (
     EventMainData,
     RelationMainData,
+    Permissive,
 )
 from omni_python_library.utils.config import UserRole
 
@@ -16,6 +16,7 @@ from omni_osint_query.main import app
 class TestEvent:
     client: TestClient
     no_roles_client: TestClient
+    guest_client: TestClient
 
     @classmethod
     def setup_class(cls):
@@ -32,6 +33,8 @@ class TestEvent:
         cls.no_roles_client = TestClient(app)
         cls.no_roles_client.headers = {"Authorization": f"Bearer {no_roles_token}"}
 
+        cls.guest_client = TestClient(app)
+
     def setup_method(self):
         # Clear DB collections before each test
         for col_name in ArangoDBClient()._collections:
@@ -46,6 +49,14 @@ class TestEvent:
             owner="test-user-id-123",
             roles=[UserRole.ADMIN],
         )
+        OsintDataAccessLayer().update_event(
+            event1.id,
+            Permissive(
+                read=[UserRole.GUEST],
+            ),
+            owner="test-user-id-123",
+            roles=[UserRole.ADMIN],
+        )
         event2 = OsintDataAccessLayer().create_event(
             EventMainData(
                 title="Test Event 2",
@@ -54,12 +65,6 @@ class TestEvent:
             owner="test-user-id-123",
             roles=[UserRole.ADMIN],
         )
-        results = search_events(
-            owner="test-user-id-123",
-            roles=[UserRole.ADMIN],
-            date_range=(0, 2500),
-        )
-        assert len(results) == 2, f"{results}"
 
         response = self.client.get(
             "/events",
@@ -68,11 +73,23 @@ class TestEvent:
                 "date_end": 1000000000,
             },
         )
-
         assert response.status_code == 200
         data = response.json()
         assert len(data["events"]) == 2
         assert {e["_id"] for e in data["events"]} == {event1.id, event2.id}
+        assert len(data["relations"]) == 0
+
+        response = self.guest_client.get(
+            "/events",
+            params={
+                "date_start": 0,
+                "date_end": 1000000000,
+            },
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert len(data["events"]) == 1
+        assert {e["_id"] for e in data["events"]} == {event1.id}
         assert len(data["relations"]) == 0
 
     def test_execute_query(self):
@@ -97,12 +114,6 @@ class TestEvent:
             owner="test-user-id-123",
             roles=[UserRole.ADMIN],
         )
-        results = search_events(
-            owner="test-user-id-123",
-            roles=[UserRole.ADMIN],
-            date_range=(0, 2500),
-        )
-        assert len(results) == 3, f"{results}"
 
         response = self.client.get(
             "/events",
