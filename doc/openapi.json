@@ -408,7 +408,8 @@
           "type": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 100
               },
               {
                 "type": "null"
@@ -431,7 +432,8 @@
           "title": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 100
               },
               {
                 "type": "null"
@@ -443,7 +445,8 @@
           "description": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 1000
               },
               {
                 "type": "null"
@@ -455,7 +458,8 @@
           "happened_at": {
             "anyOf": [
               {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0.0
               },
               {
                 "type": "null"
@@ -470,7 +474,8 @@
                 "items": {
                   "type": "string"
                 },
-                "type": "array"
+                "type": "array",
+                "maxItems": 100
               },
               {
                 "type": "null"
@@ -483,7 +488,8 @@
             "anyOf": [
               {
                 "additionalProperties": true,
-                "type": "object"
+                "type": "object",
+                "maxProperties": 50
               },
               {
                 "type": "null"
@@ -494,6 +500,7 @@
           },
           "owner": {
             "type": "string",
+            "maxLength": 100,
             "title": "Owner",
             "description": "Owner of the document"
           },
@@ -502,6 +509,7 @@
               "type": "string"
             },
             "type": "array",
+            "maxItems": 100,
             "title": "Read",
             "description": "Users/Roles with read access"
           },
@@ -510,6 +518,7 @@
               "type": "string"
             },
             "type": "array",
+            "maxItems": 100,
             "title": "Write",
             "description": "Users/Roles with write access"
           },
@@ -552,7 +561,8 @@
           "created_at": {
             "anyOf": [
               {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0.0
               },
               {
                 "type": "null"
@@ -564,7 +574,8 @@
           "updated_at": {
             "anyOf": [
               {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0.0
               },
               {
                 "type": "null"
@@ -619,38 +630,46 @@
           },
           "country_code": {
             "type": "string",
+            "maxLength": 2,
             "title": "Country Code",
             "description": "ISO country code"
           },
           "administrative_area": {
             "type": "string",
+            "maxLength": 100,
             "title": "Administrative Area",
             "description": "Administrative area (e.g., state, province)"
           },
           "sub_administrative_area": {
             "type": "string",
+            "maxLength": 100,
             "title": "Sub Administrative Area",
             "description": "Sub-administrative area",
             "default": ""
           },
           "locality": {
             "type": "string",
+            "maxLength": 100,
             "title": "Locality",
             "description": "Locality (e.g., city, town)"
           },
           "sub_locality": {
             "type": "string",
+            "maxLength": 100,
             "title": "Sub Locality",
             "description": "Sub-locality",
             "default": ""
           },
           "address": {
             "type": "string",
+            "maxLength": 200,
             "title": "Address",
             "description": "Full address"
           },
           "postal_code": {
             "type": "integer",
+            "maximum": 9999999999.0,
+            "minimum": 0.0,
             "title": "Postal Code",
             "description": "Postal code"
           }
@@ -733,7 +752,8 @@
           "type": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 100
               },
               {
                 "type": "null"
@@ -745,7 +765,8 @@
           "name": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 100
               },
               {
                 "type": "null"
@@ -757,7 +778,8 @@
           "founded_at": {
             "anyOf": [
               {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0.0
               },
               {
                 "type": "null"
@@ -769,7 +791,8 @@
           "discovered_at": {
             "anyOf": [
               {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0.0
               },
               {
                 "type": "null"
@@ -781,7 +804,8 @@
           "last_visited": {
             "anyOf": [
               {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0.0
               },
               {
                 "type": "null"
@@ -796,7 +820,8 @@
                 "items": {
                   "type": "string"
                 },
-                "type": "array"
+                "type": "array",
+                "maxItems": 100
               },
               {
                 "type": "null"
@@ -809,7 +834,8 @@
             "anyOf": [
               {
                 "additionalProperties": true,
-                "type": "object"
+                "type": "object",
+                "maxProperties": 50
               },
               {
                 "type": "null"
@@ -820,6 +846,7 @@
           },
           "owner": {
             "type": "string",
+            "maxLength": 100,
             "title": "Owner",
             "description": "Owner of the document"
           },
@@ -828,6 +855,7 @@
               "type": "string"
             },
             "type": "array",
+            "maxItems": 100,
             "title": "Read",
             "description": "Users/Roles with read access"
           },
@@ -836,6 +864,7 @@
               "type": "string"
             },
             "type": "array",
+            "maxItems": 100,
             "title": "Write",
             "description": "Users/Roles with write access"
           },
@@ -878,7 +907,8 @@
           "created_at": {
             "anyOf": [
               {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0.0
               },
               {
                 "type": "null"
@@ -890,7 +920,8 @@
           "updated_at": {
             "anyOf": [
               {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0.0
               },
               {
                 "type": "null"
@@ -909,7 +940,8 @@
           "type": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 100
               },
               {
                 "type": "null"
@@ -921,7 +953,8 @@
           "role": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 100
               },
               {
                 "type": "null"
@@ -933,7 +966,8 @@
           "name": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 100
               },
               {
                 "type": "null"
@@ -945,7 +979,8 @@
           "nationality": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 100
               },
               {
                 "type": "null"
@@ -957,7 +992,8 @@
           "birth_date": {
             "anyOf": [
               {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0.0
               },
               {
                 "type": "null"
@@ -972,7 +1008,8 @@
                 "items": {
                   "type": "string"
                 },
-                "type": "array"
+                "type": "array",
+                "maxItems": 100
               },
               {
                 "type": "null"
@@ -987,7 +1024,8 @@
                 "items": {
                   "type": "string"
                 },
-                "type": "array"
+                "type": "array",
+                "maxItems": 100
               },
               {
                 "type": "null"
@@ -1000,7 +1038,8 @@
             "anyOf": [
               {
                 "additionalProperties": true,
-                "type": "object"
+                "type": "object",
+                "maxProperties": 50
               },
               {
                 "type": "null"
@@ -1011,6 +1050,7 @@
           },
           "owner": {
             "type": "string",
+            "maxLength": 100,
             "title": "Owner",
             "description": "Owner of the document"
           },
@@ -1019,6 +1059,7 @@
               "type": "string"
             },
             "type": "array",
+            "maxItems": 100,
             "title": "Read",
             "description": "Users/Roles with read access"
           },
@@ -1027,6 +1068,7 @@
               "type": "string"
             },
             "type": "array",
+            "maxItems": 100,
             "title": "Write",
             "description": "Users/Roles with write access"
           },
@@ -1069,7 +1111,8 @@
           "created_at": {
             "anyOf": [
               {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0.0
               },
               {
                 "type": "null"
@@ -1081,7 +1124,8 @@
           "updated_at": {
             "anyOf": [
               {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0.0
               },
               {
                 "type": "null"
@@ -1128,7 +1172,8 @@
           "name": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 100
               },
               {
                 "type": "null"
@@ -1140,7 +1185,9 @@
           "confidence": {
             "anyOf": [
               {
-                "type": "integer"
+                "type": "integer",
+                "maximum": 100.0,
+                "minimum": 0.0
               },
               {
                 "type": "null"
@@ -1152,7 +1199,8 @@
           "label": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 100
               },
               {
                 "type": "null"
@@ -1165,7 +1213,8 @@
             "anyOf": [
               {
                 "additionalProperties": true,
-                "type": "object"
+                "type": "object",
+                "maxProperties": 50
               },
               {
                 "type": "null"
@@ -1177,7 +1226,8 @@
           "_from": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 100
               },
               {
                 "type": "null"
@@ -1189,7 +1239,8 @@
           "_to": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 100
               },
               {
                 "type": "null"
@@ -1200,6 +1251,7 @@
           },
           "owner": {
             "type": "string",
+            "maxLength": 100,
             "title": "Owner",
             "description": "Owner of the document"
           },
@@ -1208,6 +1260,7 @@
               "type": "string"
             },
             "type": "array",
+            "maxItems": 100,
             "title": "Read",
             "description": "Users/Roles with read access"
           },
@@ -1216,6 +1269,7 @@
               "type": "string"
             },
             "type": "array",
+            "maxItems": 100,
             "title": "Write",
             "description": "Users/Roles with write access"
           },
@@ -1258,7 +1312,8 @@
           "created_at": {
             "anyOf": [
               {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0.0
               },
               {
                 "type": "null"
@@ -1270,7 +1325,8 @@
           "updated_at": {
             "anyOf": [
               {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0.0
               },
               {
                 "type": "null"
@@ -1289,7 +1345,8 @@
           "type": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 100
               },
               {
                 "type": "null"
@@ -1301,7 +1358,8 @@
           "url": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 200
               },
               {
                 "type": "null"
@@ -1313,7 +1371,8 @@
           "name": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 100
               },
               {
                 "type": "null"
@@ -1325,7 +1384,8 @@
           "title": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 100
               },
               {
                 "type": "null"
@@ -1337,7 +1397,8 @@
           "description": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 1000
               },
               {
                 "type": "null"
@@ -1349,7 +1410,9 @@
           "reliability": {
             "anyOf": [
               {
-                "type": "integer"
+                "type": "integer",
+                "maximum": 100.0,
+                "minimum": 0.0
               },
               {
                 "type": "null"
@@ -1364,7 +1427,8 @@
                 "items": {
                   "type": "string"
                 },
-                "type": "array"
+                "type": "array",
+                "maxItems": 100
               },
               {
                 "type": "null"
@@ -1377,7 +1441,8 @@
             "anyOf": [
               {
                 "additionalProperties": true,
-                "type": "object"
+                "type": "object",
+                "maxProperties": 50
               },
               {
                 "type": "null"
@@ -1388,6 +1453,7 @@
           },
           "owner": {
             "type": "string",
+            "maxLength": 100,
             "title": "Owner",
             "description": "Owner of the document"
           },
@@ -1396,6 +1462,7 @@
               "type": "string"
             },
             "type": "array",
+            "maxItems": 100,
             "title": "Read",
             "description": "Users/Roles with read access"
           },
@@ -1404,6 +1471,7 @@
               "type": "string"
             },
             "type": "array",
+            "maxItems": 100,
             "title": "Write",
             "description": "Users/Roles with write access"
           },
@@ -1446,7 +1514,8 @@
           "created_at": {
             "anyOf": [
               {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0.0
               },
               {
                 "type": "null"
@@ -1458,7 +1527,8 @@
           "updated_at": {
             "anyOf": [
               {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0.0
               },
               {
                 "type": "null"
@@ -1517,7 +1587,8 @@
           "type": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 100
               },
               {
                 "type": "null"
@@ -1529,7 +1600,8 @@
           "url": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 200
               },
               {
                 "type": "null"
@@ -1541,7 +1613,8 @@
           "title": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 100
               },
               {
                 "type": "null"
@@ -1553,7 +1626,8 @@
           "description": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 1000
               },
               {
                 "type": "null"
@@ -1565,7 +1639,8 @@
           "founded_at": {
             "anyOf": [
               {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0.0
               },
               {
                 "type": "null"
@@ -1577,7 +1652,8 @@
           "discovered_at": {
             "anyOf": [
               {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0.0
               },
               {
                 "type": "null"
@@ -1589,7 +1665,8 @@
           "last_visited": {
             "anyOf": [
               {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0.0
               },
               {
                 "type": "null"
@@ -1604,7 +1681,8 @@
                 "items": {
                   "type": "string"
                 },
-                "type": "array"
+                "type": "array",
+                "maxItems": 100
               },
               {
                 "type": "null"
@@ -1617,7 +1695,8 @@
             "anyOf": [
               {
                 "additionalProperties": true,
-                "type": "object"
+                "type": "object",
+                "maxProperties": 50
               },
               {
                 "type": "null"
@@ -1628,6 +1707,7 @@
           },
           "owner": {
             "type": "string",
+            "maxLength": 100,
             "title": "Owner",
             "description": "Owner of the document"
           },
@@ -1636,6 +1716,7 @@
               "type": "string"
             },
             "type": "array",
+            "maxItems": 100,
             "title": "Read",
             "description": "Users/Roles with read access"
           },
@@ -1644,6 +1725,7 @@
               "type": "string"
             },
             "type": "array",
+            "maxItems": 100,
             "title": "Write",
             "description": "Users/Roles with write access"
           },
@@ -1686,7 +1768,8 @@
           "created_at": {
             "anyOf": [
               {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0.0
               },
               {
                 "type": "null"
@@ -1698,7 +1781,8 @@
           "updated_at": {
             "anyOf": [
               {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0.0
               },
               {
                 "type": "null"
