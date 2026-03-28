@@ -1,5 +1,6 @@
-import jwt
 from urllib.parse import quote
+
+import jwt
 from fastapi.testclient import TestClient
 from omni_python_library import init_omni_library
 from omni_python_library.clients import ArangoDBClient
@@ -150,7 +151,9 @@ class TestNeighbors:
             roles=[UserRole.ADMIN],
         )
 
-        response = self.client.get(f"/entities/neighbors?ids={quote(event1.id, safe='')}&ids={quote(event2.id, safe='')}")
+        response = self.client.get(
+            f"/entities/neighbors?ids={quote(event1.id, safe='')}&ids={quote(event2.id, safe='')}"
+        )
 
         assert response.status_code == 200
         data = response.json()
