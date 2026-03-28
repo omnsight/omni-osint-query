@@ -1,7 +1,7 @@
 import logging
 from typing import Dict, List
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Path
 from omni_python_library.dal.query_tools import search_entity_neighborhood
 from omni_python_library.dal.osint_data_access_layer import OsintDataAccessLayer
 from omni_python_library.utils.config import ArangoDBConstant
@@ -35,7 +35,7 @@ class NeighborsResponse(BaseModel):
 
 @router.get("/entities/{id:path}/neighbors", response_model=NeighborsResponse, operation_id="query_neighbors")
 def query_neighbors(
-    id: str,
+    id: str = Path(pattern=r"^[A-Za-z0-9_-]+\/[A-Za-z0-9_-]+$", description="The ArangoDB Document ID (e.g., collection/123)"),
     user_ctx: Dict = Depends(get_user_context),
     limit: int = Query(default=30, description="The maximum number of results to return."),
     offset: int = Query(default=0, description="The offset from which to start returning results."),
@@ -75,9 +75,9 @@ def query_neighbors(
         raise HTTPException(status_code=500, detail="Internal server error")
 
 
-@router.post("/entities/neighbors", response_model=NeighborsResponse, operation_id="query_neighbors_batch")
+@router.get("/entities/neighbors", response_model=NeighborsResponse, operation_id="query_neighbors_batch")
 def query_neighbors_batch(
-    ids: List[str],
+    ids: List[str] = Query(default_factory=list, max_length=100, description="A list of entity IDs to query neighbors for."),
     user_ctx: Dict = Depends(get_user_context),
     limit: int = Query(default=30, description="The maximum number of results to return."),
     offset: int = Query(default=0, description="The offset from which to start returning results."),
@@ -92,7 +92,7 @@ def query_neighbors_batch(
             LET all_neighbors = (
                 FOR entity_id IN @entity_ids
                     FOR v, e IN 1..1 ANY entity_id GRAPH '{ArangoDBConstant.EVENT_RELATED_GRAPH}'
-                        FILTER (v.owner == @owner OR LENGTH(INTERSECTION(v.read, @roles)) > 0)
+                        FILTER v.owner == @owner OR (FOR r IN @roles FILTER r IN v.read LIMIT 1 RETURN true)[0]
                         RETURN {{ v: v, e: e }}
             )
             LET limited_neighbors = (

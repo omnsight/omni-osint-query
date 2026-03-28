@@ -1,4 +1,5 @@
 import jwt
+from urllib.parse import quote
 from fastapi.testclient import TestClient
 from omni_python_library import init_omni_library
 from omni_python_library.clients import ArangoDBClient
@@ -18,7 +19,6 @@ from omni_osint_query.main import app
 
 class TestNeighbors:
     client: TestClient
-    no_roles_client: TestClient
 
     @classmethod
     def setup_class(cls):
@@ -28,12 +28,6 @@ class TestNeighbors:
         token = jwt.encode(payload, key=None, algorithm="none")
         cls.client = TestClient(app)
         cls.client.headers = {"Authorization": f"Bearer {token}"}
-
-        # Client with no roles
-        no_roles_payload = {"sub": "test-user-id-456", "roles": []}
-        no_roles_token = jwt.encode(no_roles_payload, key=None, algorithm="none")
-        cls.no_roles_client = TestClient(app)
-        cls.no_roles_client.headers = {"Authorization": f"Bearer {no_roles_token}"}
 
     def setup_method(self):
         # Clear DB collections before each test
@@ -97,7 +91,7 @@ class TestNeighbors:
 
         with patch("omni_osint_query.routers.query_neighbors.search_entity_neighborhood") as mock_search:
             mock_search.side_effect = Exception("Test exception")
-            response = self.client.get("/entities/any_id/neighbors")
+            response = self.client.get("/entities/any/id/neighbors")
             assert response.status_code == 500
             assert response.json() == {"detail": "Internal server error"}
 
@@ -132,7 +126,7 @@ class TestNeighbors:
 
         with patch("omni_osint_query.routers.query_neighbors.OsintDataAccessLayer.query") as mock_search:
             mock_search.side_effect = Exception("Test exception")
-            response = self.client.post("/entities/neighbors", json=["any_id"])
+            response = self.client.get(f"/entities/neighbors?ids=any_id")
             assert response.status_code == 500
             assert response.json() == {"detail": "Internal server error"}
 
@@ -156,7 +150,7 @@ class TestNeighbors:
             roles=[UserRole.ADMIN],
         )
 
-        response = self.client.post("/entities/neighbors", json=[event1.id, event2.id])
+        response = self.client.get(f"/entities/neighbors?ids={quote(event1.id, safe='')}&ids={quote(event2.id, safe='')}")
 
         assert response.status_code == 200
         data = response.json()
@@ -187,7 +181,7 @@ class TestNeighbors:
             roles=[UserRole.ADMIN],
         )
 
-        response = self.client.post(f"/entities/neighbors?include=Person", json=[event.id])
+        response = self.client.get(f"/entities/neighbors?include=Person&ids={quote(event.id, safe='')}")
 
         assert response.status_code == 200
         data = response.json()
@@ -219,7 +213,7 @@ class TestNeighbors:
             roles=[UserRole.ADMIN],
         )
 
-        response = self.client.post(f"/entities/neighbors?exclude=Person", json=[event.id])
+        response = self.client.get(f"/entities/neighbors?exclude=Person&ids={quote(event.id, safe='')}")
 
         assert response.status_code == 200
         data = response.json()
