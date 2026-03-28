@@ -8,11 +8,11 @@ from omni_python_library.dal import OsintDataAccessLayer
 from omni_python_library.models import (
     EventMainData,
     OrganizationMainData,
+    Permissive,
     PersonMainData,
     RelationMainData,
     SourceMainData,
     WebsiteMainData,
-    Permissive,
 )
 from omni_python_library.utils.config import UserRole
 

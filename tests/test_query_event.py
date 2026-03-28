@@ -5,8 +5,8 @@ from omni_python_library.clients import ArangoDBClient
 from omni_python_library.dal import OsintDataAccessLayer
 from omni_python_library.models import (
     EventMainData,
-    RelationMainData,
     Permissive,
+    RelationMainData,
 )
 from omni_python_library.utils.config import UserRole
 
