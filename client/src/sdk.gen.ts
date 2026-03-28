@@ -39,14 +39,10 @@ export const queryNeighbors = <ThrowOnError extends boolean = false>(options: Op
 /**
  * Query Neighbors Batch
  */
-export const queryNeighborsBatch = <ThrowOnError extends boolean = false>(options: Options<QueryNeighborsBatchData, ThrowOnError>) => (options.client ?? client).post<QueryNeighborsBatchResponses, QueryNeighborsBatchErrors, ThrowOnError>({
+export const queryNeighborsBatch = <ThrowOnError extends boolean = false>(options?: Options<QueryNeighborsBatchData, ThrowOnError>) => (options?.client ?? client).get<QueryNeighborsBatchResponses, QueryNeighborsBatchErrors, ThrowOnError>({
     responseType: 'json',
     url: '/entities/neighbors',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
+    ...options
 });
 
 /**

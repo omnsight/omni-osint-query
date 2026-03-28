@@ -164,8 +164,11 @@
             "required": true,
             "schema": {
               "type": "string",
+              "pattern": "^[A-Za-z0-9_-]+\\/[A-Za-z0-9_-]+$",
+              "description": "The ArangoDB Document ID (e.g., collection/123)",
               "title": "Id"
-            }
+            },
+            "description": "The ArangoDB Document ID (e.g., collection/123)"
           },
           {
             "name": "limit",
@@ -261,13 +264,28 @@
       }
     },
     "/entities/neighbors": {
-      "post": {
+      "get": {
         "tags": [
           "query"
         ],
         "summary": "Query Neighbors Batch",
         "operationId": "query_neighbors_batch",
         "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 100,
+              "description": "A list of entity IDs to query neighbors for.",
+              "title": "Ids"
+            },
+            "description": "A list of entity IDs to query neighbors for."
+          },
           {
             "name": "limit",
             "in": "query",
@@ -337,20 +355,6 @@
             }
           }
         ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                },
-                "title": "Ids"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Successful Response",

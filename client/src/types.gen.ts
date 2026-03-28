@@ -883,6 +883,8 @@ export type QueryNeighborsData = {
     path: {
         /**
          * Id
+         *
+         * The ArangoDB Document ID (e.g., collection/123)
          */
         id: string;
     };
@@ -934,10 +936,7 @@ export type QueryNeighborsResponses = {
 export type QueryNeighborsResponse = QueryNeighborsResponses[keyof QueryNeighborsResponses];
 
 export type QueryNeighborsBatchData = {
-    /**
-     * Ids
-     */
-    body: Array<string>;
+    body?: never;
     headers?: {
         /**
          * Authorization
@@ -946,6 +945,12 @@ export type QueryNeighborsBatchData = {
     };
     path?: never;
     query?: {
+        /**
+         * Ids
+         *
+         * A list of entity IDs to query neighbors for.
+         */
+        ids?: Array<string>;
         /**
          * Limit
          *
