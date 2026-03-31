@@ -10,7 +10,7 @@ class HealthCheck(BaseModel):
 
 
 @router.get(
-    "/health/osint/query",
+    "/health",
     response_model=HealthCheck,
     operation_id="health_check",
     include_in_schema=False,
