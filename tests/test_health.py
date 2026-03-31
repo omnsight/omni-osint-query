@@ -19,6 +19,6 @@ class TestHealth:
             ArangoDBClient()._collections[col_name].truncate()
 
     def test_health_check(self):
-        response = self.client.get("/health/osint/query")
+        response = self.client.get("/health")
         assert response.status_code == 200
         assert response.json() == {"status": "ok"}

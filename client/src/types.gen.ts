@@ -113,18 +113,6 @@ export type HttpValidationError = {
 };
 
 /**
- * HealthCheck
- */
-export type HealthCheck = {
-    /**
-     * Status
-     *
-     * The health status of the service.
-     */
-    status: string;
-};
-
-/**
  * LocationData
  *
  * Represents geographical location data.
@@ -996,19 +984,3 @@ export type QueryNeighborsBatchResponses = {
 };
 
 export type QueryNeighborsBatchResponse = QueryNeighborsBatchResponses[keyof QueryNeighborsBatchResponses];
-
-export type HealthCheckData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/health/osint/query';
-};
-
-export type HealthCheckResponses = {
-    /**
-     * Successful Response
-     */
-    200: HealthCheck;
-};
-
-export type HealthCheckResponse = HealthCheckResponses[keyof HealthCheckResponses];
