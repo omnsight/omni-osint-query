@@ -19,7 +19,7 @@ from omni_python_library.utils.config import UserRole
 from omni_osint_query.main import app
 
 
-class TestNeighbors:
+class TestQueryNeighbors:
     client: TestClient
     guest_client: TestClient
 
@@ -84,7 +84,7 @@ class TestNeighbors:
             roles=[UserRole.ADMIN],
         )
 
-        response = self.client.get(f"/entities/{event.id}/neighbors?limit=10&offset=0")
+        response = self.client.get(f"/entity/neighbors?id={quote(event.id, safe='')}&limit=10&offset=0")
         assert response.status_code == 200
         data = response.json()
         assert len(data["persons"]) == 1, f"{data}"
@@ -97,7 +97,7 @@ class TestNeighbors:
         assert data["websites"][0]["_id"] == website.id
         assert len(data["relations"]) == 4
 
-        response = self.guest_client.get(f"/entities/{event.id}/neighbors?limit=10&offset=0")
+        response = self.guest_client.get(f"/entity/neighbors?id={quote(event.id, safe='')}&limit=10&offset=0")
         assert response.status_code == 200
         data = response.json()
         assert len(data["persons"]) == 1, f"{data}"
@@ -112,7 +112,7 @@ class TestNeighbors:
 
         with patch("omni_osint_query.routers.query_neighbors.search_entity_neighborhood") as mock_search:
             mock_search.side_effect = Exception("Test exception")
-            response = self.client.get("/entities/any/id/neighbors")
+            response = self.client.get("/entity/neighbors?id=any/id")
             assert response.status_code == 500
             assert response.json() == {"detail": "Internal server error"}
 
@@ -130,7 +130,7 @@ class TestNeighbors:
             roles=[UserRole.ADMIN],
         )
 
-        response = self.client.get(f"/entities/{event.id}/neighbors?include=Person")
+        response = self.client.get(f"/entity/neighbors?id={quote(event.id, safe='')}&include=Person")
 
         assert response.status_code == 200
         data = response.json()
@@ -268,7 +268,7 @@ class TestNeighbors:
             roles=[UserRole.ADMIN],
         )
 
-        response = self.client.get(f"/entities/{event.id}/neighbors?exclude=Person")
+        response = self.client.get(f"/entity/neighbors?id={quote(event.id, safe='')}&exclude=Person")
 
         assert response.status_code == 200
         data = response.json()
