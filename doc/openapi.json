@@ -5,7 +5,7 @@
     "version": "0.1.0"
   },
   "paths": {
-    "/events": {
+    "/events/query": {
       "get": {
         "tags": [
           "query"
@@ -150,7 +150,7 @@
         }
       }
     },
-    "/entities/{id}/neighbors": {
+    "/entity/neighbors": {
       "get": {
         "tags": [
           "query"
@@ -160,7 +160,7 @@
         "parameters": [
           {
             "name": "id",
-            "in": "path",
+            "in": "query",
             "required": true,
             "schema": {
               "type": "string",

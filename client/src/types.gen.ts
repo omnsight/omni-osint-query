@@ -839,7 +839,7 @@ export type QueryEventsData = {
          */
         offset?: number;
     };
-    url: '/events';
+    url: '/events/query';
 };
 
 export type QueryEventsErrors = {
@@ -868,15 +868,14 @@ export type QueryNeighborsData = {
          */
         authorization?: string | null;
     };
-    path: {
+    path?: never;
+    query: {
         /**
          * Id
          *
          * The ArangoDB Document ID (e.g., collection/123)
          */
         id: string;
-    };
-    query?: {
         /**
          * Limit
          *
@@ -902,7 +901,7 @@ export type QueryNeighborsData = {
          */
         exclude?: Array<string>;
     };
-    url: '/entities/{id}/neighbors';
+    url: '/entity/neighbors';
 };
 
 export type QueryNeighborsErrors = {

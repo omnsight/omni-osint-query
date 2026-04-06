@@ -23,7 +23,7 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
  */
 export const queryEvents = <ThrowOnError extends boolean = false>(options?: Options<QueryEventsData, ThrowOnError>) => (options?.client ?? client).get<QueryEventsResponses, QueryEventsErrors, ThrowOnError>({
     responseType: 'json',
-    url: '/events',
+    url: '/events/query',
     ...options
 });
 
@@ -32,7 +32,7 @@ export const queryEvents = <ThrowOnError extends boolean = false>(options?: Opti
  */
 export const queryNeighbors = <ThrowOnError extends boolean = false>(options: Options<QueryNeighborsData, ThrowOnError>) => (options.client ?? client).get<QueryNeighborsResponses, QueryNeighborsErrors, ThrowOnError>({
     responseType: 'json',
-    url: '/entities/{id}/neighbors',
+    url: '/entity/neighbors',
     ...options
 });
 
