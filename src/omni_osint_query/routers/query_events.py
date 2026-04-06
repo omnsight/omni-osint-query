@@ -21,7 +21,7 @@ class QueryResponse(BaseModel):
     offset: int = Field(default=0, description="The offset from which to start returning results.")
 
 
-@router.get("/events", response_model=QueryResponse, operation_id="query_events")
+@router.get("/events/query", response_model=QueryResponse, operation_id="query_events")
 def query_events(
     query: Optional[str] = Query(default=None, description="The search query string."),
     date_start: Optional[int] = Query(default=None, description="The start of the date range for the query."),

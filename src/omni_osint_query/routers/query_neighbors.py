@@ -33,9 +33,9 @@ class NeighborsResponse(BaseModel):
     offset: int = Field(default=0, description="The offset from which to start returning results.")
 
 
-@router.get("/entities/{id:path}/neighbors", response_model=NeighborsResponse, operation_id="query_neighbors")
+@router.get("/entity/neighbors", response_model=NeighborsResponse, operation_id="query_neighbors")
 def query_neighbors(
-    id: str = Path(
+    id: str = Query(
         pattern=r"^[A-Za-z0-9_-]+\/[A-Za-z0-9_-]+$", description="The ArangoDB Document ID (e.g., collection/123)"
     ),
     user_ctx: Dict = Depends(get_user_context),

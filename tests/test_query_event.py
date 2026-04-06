@@ -13,7 +13,7 @@ from omni_python_library.utils.config import UserRole
 from omni_osint_query.main import app
 
 
-class TestEvent:
+class TestEventQuery:
     client: TestClient
     no_roles_client: TestClient
     guest_client: TestClient
@@ -67,7 +67,7 @@ class TestEvent:
         )
 
         response = self.client.get(
-            "/events",
+            "/events/query",
             params={
                 "date_start": 0,
                 "date_end": 1000000000,
@@ -80,7 +80,7 @@ class TestEvent:
         assert len(data["relations"]) == 0
 
         response = self.guest_client.get(
-            "/events",
+            "/events/query",
             params={
                 "date_start": 0,
                 "date_end": 1000000000,
@@ -116,7 +116,7 @@ class TestEvent:
         )
 
         response = self.client.get(
-            "/events",
+            "/events/query",
             params={
                 "date_start": 0,
                 "date_end": 1000000000,
@@ -135,6 +135,6 @@ class TestEvent:
 
         with patch("omni_osint_query.routers.query_events.search_events") as mock_search:
             mock_search.side_effect = Exception("Test exception")
-            response = self.client.get("/events")
+            response = self.client.get("/events/query")
             assert response.status_code == 500
             assert response.json() == {"detail": "Internal server error"}
